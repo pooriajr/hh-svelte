@@ -9,10 +9,13 @@
     addMonths,
     subMonths
   } from 'date-fns'
-  import { flip } from 'svelte/animate'
+
+  import { afterUpdate } from 'svelte'
 
   let today = new Date()
   let displayDate = today
+
+  let slideDirection = ''
 
   function generateMonthArray(startDate) {
     let result
@@ -29,9 +32,12 @@
 
   function nextMonth() {
     displayDate = addMonths(displayDate, 1)
+    slideDirection = 'right'
   }
+
   function prevMonth() {
     displayDate = subMonths(displayDate, 1)
+    slideDirection = 'left'
   }
 
   $: monthArray = generateMonthArray(displayDate)
@@ -50,6 +56,41 @@
     'November',
     'December'
   ]
+
+  let div
+
+  afterUpdate(() => {
+    if (slideDirection === 'left') {
+      slideFromLeft(div)
+    } else if (slideDirection === 'right') {
+      slideFromRight(div)
+    }
+    slideDirection = ''
+  })
+
+  function slideFromLeft(element) {
+    requestAnimationFrame(() => {
+      element.style.transition = 'none'
+      element.style.left = '-100%'
+
+      setTimeout(() => {
+        element.style.transition = 'left .2s'
+        element.style.left = '0px'
+      })
+    })
+  }
+
+  function slideFromRight(element) {
+    requestAnimationFrame(() => {
+      element.style.transition = 'none'
+      element.style.left = '200%'
+
+      setTimeout(() => {
+        element.style.transition = 'left .2s'
+        element.style.left = '0px'
+      })
+    })
+  }
 </script>
 
 <div class="header">
@@ -57,7 +98,7 @@
   <h1>{monthNames[displayDate.getMonth()]} {displayDate.getFullYear()}</h1>
   <div class="arrow" on:click="{nextMonth}">&gt</div>
 </div>
-<div class="calendar">
+<div class="day-grid" bind:this="{div}">
   {#each monthArray as day}
   <div class="cell {!isSameMonth(day, displayDate) && 'other-month'} {isSameDay(day,today) && 'today'}">
     {day.getDate()}
@@ -82,8 +123,9 @@
     background: #f3f3f3;
     border-radius: 5px;
   }
-  .calendar {
+  .day-grid {
     width: 100%;
+    position: absolute;
     height: calc(100% - 80px);
   }
   .cell {
