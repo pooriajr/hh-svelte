@@ -16,20 +16,20 @@
     123: {
       id: 123,
       title: 'The Plan',
-      startDate: new Date('2019-10-4'),
-      endDate: new Date('2019-10-21')
+      startDate: new Date(2019, 9, 1),
+      endDate: new Date(2019, 9, 5)
     },
     234: {
       id: 234,
       title: 'Meditation',
-      startDate: new Date('2019-09-25'),
-      endDate: new Date('2019-11-01')
+      startDate: new Date(2019, 9, 2),
+      endDate: new Date(2019, 10, 1)
     },
     345: {
       id: 345,
       title: 'Veganism',
-      startDate: new Date('2019-09-01'),
-      endDate: new Date('2019-09-25')
+      startDate: new Date(2019, 8, 1),
+      endDate: new Date(2019, 8, 25)
     }
   }
 
@@ -67,7 +67,7 @@
       })
     })
 
-    //4. get the habits to display (th ones that overlap with the display range)
+    //4. get the habits to display (the ones that overlap with the display range)
     const displayHabits = Object.values(habitData).filter(habit => {
       let habitInterval = { start: habit.startDate, end: habit.endDate }
       return areIntervalsOverlapping(habitInterval, displayDateInterval)
@@ -118,11 +118,11 @@
 </div>
 <div class="day-grid">
   {#each dayArray as day}
-  <div class="cell {!isSameMonth(day.date, displayDate) && 'other-month'} {isSameDay(day.date,today) && 'today'}">
+  <div class="cell" class:other-month="{!isSameMonth(day.date, displayDate)}" class:today="{isSameDay(day.date,today)}">
     {day.date.getDate()} {#each day.habits as habit}
-    <p>
+    <div>
       {habit.title}
-    </p>
+    </div>
     {/each}
   </div>
   {/each}
@@ -146,18 +146,16 @@
     border-radius: 5px;
   }
   .day-grid {
-    width: 100%;
-    position: absolute;
     height: calc(100% - 80px);
+    display: grid;
+    grid-template-columns: repeat(7, auto);
+    grid-template-rows: repeat(6, auto);
+    grid-gap: 3px;
   }
   .cell {
-    width: calc(100% / 7);
-    height: calc(100% / 6);
     padding: 5px;
     border-radius: 5px;
     background: #f3f3f3;
-    border: 2px solid white;
-    display: inline-block;
   }
 
   .today {
