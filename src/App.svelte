@@ -7,23 +7,82 @@
     isSameMonth,
     isSameDay,
     addMonths,
-    subMonths
+    subMonths,
+    areIntervalsOverlapping,
+    isWithinInterval
   } from 'date-fns'
+
+  let habitData = {
+    123: {
+      id: 123,
+      title: 'The Plan',
+      startDate: new Date('2019-10-4'),
+      endDate: new Date('2019-10-21')
+    },
+    234: {
+      id: 234,
+      title: 'Meditation',
+      startDate: new Date('2019-09-25'),
+      endDate: new Date('2019-11-01')
+    },
+    345: {
+      id: 345,
+      title: 'Veganism',
+      startDate: new Date('2019-09-01'),
+      endDate: new Date('2019-09-25')
+    }
+  }
+
+  // let recordData = {
+  //   '2019-10-6': {
+  //     123: true,
+  //     234: false
+  //   },
+  //   '2019-10-4': {
+  //     123: true
+  //   }
+  // }
 
   let today = new Date()
   let displayDate = today
 
-  function generateMonthArray(startDate) {
-    let result
-    // 1. get first day of first week of the month in given date
-    // * this is usually not the first day of the month.
-    let firstDay = startOfWeek(startOfMonth(startDate))
+  function generateDayArray(startDate) {
+    let dateArray
+    // 1. get first and last days of the display range,
+    // * based on the first day of the first week of the month of the displayDate.
+    let displayStartDate = startOfWeek(startOfMonth(startDate))
+    let displayEndDate = addDays(displayStartDate, 41)
 
-    // 2. return an array of 42 dates - that day and the following 41
-    return eachDayOfInterval({
-      start: firstDay,
-      end: addDays(firstDay, 41)
+    // 2. create an array of the dates in that range
+    let displayDateInterval = {
+      start: displayStartDate,
+      end: displayEndDate
+    }
+    dateArray = eachDayOfInterval(displayDateInterval)
+
+    //3. turn each item in the array into a day object
+    let dayArray = dateArray.map(date => {
+      return new Object({
+        date: date
+      })
     })
+
+    //4. get the habits to display (th ones that overlap with the display range)
+    const displayHabits = Object.values(habitData).filter(habit => {
+      let habitInterval = { start: habit.startDate, end: habit.endDate }
+      return areIntervalsOverlapping(habitInterval, displayDateInterval)
+    })
+
+    //5. add display habits to the days that fall in their range
+    dayArray = dayArray.map(day => {
+      let habitsForThisDay = displayHabits.filter(habit =>
+        isWithinInterval(day.date, { start: habit.startDate, end: habit.endDate })
+      )
+
+      return Object.assign(day, { habits: habitsForThisDay })
+    })
+
+    return dayArray
   }
 
   function nextMonth() {
@@ -34,7 +93,7 @@
     displayDate = subMonths(displayDate, 1)
   }
 
-  $: monthArray = generateMonthArray(displayDate)
+  $: dayArray = generateDayArray(displayDate)
 
   let monthNames = [
     'January',
@@ -58,9 +117,13 @@
   <div class="arrow" on:click="{nextMonth}">&gt</div>
 </div>
 <div class="day-grid">
-  {#each monthArray as day}
-  <div class="cell {!isSameMonth(day, displayDate) && 'other-month'} {isSameDay(day,today) && 'today'}">
-    {day.getDate()}
+  {#each dayArray as day}
+  <div class="cell {!isSameMonth(day.date, displayDate) && 'other-month'} {isSameDay(day.date,today) && 'today'}">
+    {day.date.getDate()} {#each day.habits as habit}
+    <p>
+      {habit.title}
+    </p>
+    {/each}
   </div>
   {/each}
 </div>
