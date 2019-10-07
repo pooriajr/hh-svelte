@@ -10,12 +10,8 @@
     subMonths
   } from 'date-fns'
 
-  import { afterUpdate } from 'svelte'
-
   let today = new Date()
   let displayDate = today
-
-  let slideDirection = ''
 
   function generateMonthArray(startDate) {
     let result
