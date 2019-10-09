@@ -151,6 +151,13 @@
     '234-2019-10-10': true,
   }
 
+  function cycleRecord(id) {
+    if (recordData[id] === undefined) recordData[id] = true
+    else if (recordData[id] === true) recordData[id] = false
+    else if (recordData[id] === false) recordData[id] = undefined
+    console.log(recordData);
+  }
+
 </script>
 
 
@@ -159,17 +166,17 @@
 
 
 <div class="header">
-  <div class="arrow" on:click="{prevMonth}">&lt</div>
+  <button class="arrow" on:click="{prevMonth}">&lt</button>
   <h1>{monthNames[displayDate.getMonth()]} {displayDate.getFullYear()}</h1>
-  <div class="arrow" on:click="{nextMonth}">&gt</div>
+  <button class="arrow" on:click="{nextMonth}">&gt</button>
 </div>
 <div class="day-grid">
   {#each dayArray as day}
   <div class="cell" class:other-month="{!isSameMonth(day.date, displayDate)}" class:today="{isSameDay(day.date,today)}">
     {day.date.getDate()} {#each day.habits as habit}
-    <div class="cell-habit" class:success="{recordData[habit.recordId] === true}" class:failure="{recordData[habit.recordId] === false}">
+    <button class="cell-habit" on:click="{() => cycleRecord(habit.recordId)}" class:success="{recordData[habit.recordId] === true}" class:failure="{recordData[habit.recordId] === false}">
       {habit.title}
-    </div>
+    </button>
     {/each}
   </div>
   {/each}
@@ -209,13 +216,13 @@
     font-size: 30px;
     font-weight: bold;
     width: 60px;
-    height: 40px;
     color: #a5a5a5;
     background: #f3f3f3;
     border-radius: 5px;
   }
   .day-grid {
-    height: calc(100% - 70px);
+    min-height: calc(100% - 70px);
+    width: 100%;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     grid-template-rows: repeat(6, 1fr);
@@ -225,6 +232,7 @@
     padding: 5px;
     border-radius: 5px;
     background: #f5f5f5;
+    overflow: hidden;
   }
 
   .habit {
@@ -233,10 +241,17 @@
   }
 
   .cell-habit{
+    display: block;
+    width: 100%;
     padding: 3px;
     border-radius: 3px;
     margin-bottom: 2px;
     font-size: 14px;
+    transition: .2s;
+    user-select: none;
+    overflow: hidden;
+    cursor: pointer;
+    white-space: nowrap;
   } 
 
   .cell-habit.success {
