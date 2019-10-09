@@ -40,7 +40,7 @@
   }
 
   function editHabit(id) {
-    habitData[id].title = window.prompt('Edit habit title?', habitData[id].title)
+    habitData[id].title = window.prompt('Edit habit title?', habitData[id].title) || habitData[id].title
   }
 
   let newHabitTitle = ''
