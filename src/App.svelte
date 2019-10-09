@@ -100,7 +100,7 @@
     123: {
       id: 123,
       title: 'The Plan',
-      startDate: new Date(2019, 9, 1),
+      startDate: new Date(2019, 8, 1),
       endDate: new Date(2019, 9, 5)
     },
     234: {
@@ -155,7 +155,6 @@
     if (recordData[id] === undefined) recordData[id] = true
     else if (recordData[id] === true) recordData[id] = false
     else if (recordData[id] === false) recordData[id] = undefined
-    console.log(recordData);
   }
 
 </script>
@@ -166,28 +165,47 @@
 
 
 <div class="header">
-  <button class="arrow" on:click="{prevMonth}">&lt</button>
-  <h1>{monthNames[displayDate.getMonth()]} {displayDate.getFullYear()}</h1>
-  <button class="arrow" on:click="{nextMonth}">&gt</button>
+  <div class="header-left">
+      <button class="hamburger">☰</button>
+      <h2>Habit Helper</h2>
+  </div>
+  <div class="header-right">
+    <p>{monthNames[displayDate.getMonth()]} {displayDate.getFullYear()}</p>
+    <button class="arrow" on:click="{prevMonth}">&lsaquo</button>
+    <button class="arrow" on:click="{nextMonth}">&rsaquo</button>
+    <button on:click="{() => displayDate = today}">Today</button>
+  </div>
+</div>
+<div class="day-row">
+  <div>SUN</div>
+  <div>MON</div>
+  <div>TUE</div>
+  <div>WED</div>
+  <div>THU</div>
+  <div>FRI</div>
+  <div>SAT</div>
 </div>
 <div class="day-grid">
   {#each dayArray as day}
   <div class="cell" class:other-month="{!isSameMonth(day.date, displayDate)}" class:today="{isSameDay(day.date,today)}">
-    {day.date.getDate()} {#each day.habits as habit}
-    <button class="cell-habit" on:click="{() => cycleRecord(habit.recordId)}" class:success="{recordData[habit.recordId] === true}" class:failure="{recordData[habit.recordId] === false}">
-      {habit.title}
-    </button>
+    <div class="cell-top-bar">
+      <span class="cell-date">{day.date.getDate()}</span>
+    </div> 
+    {#each day.habits as habit}
+      <button class="cell-habit" on:click="{() => cycleRecord(habit.recordId)}" class:success="{recordData[habit.recordId] === true}" class:failure="{recordData[habit.recordId] === false}">
+        {habit.title}
+      </button>
     {/each}
   </div>
   {/each}
 </div>
 <div class="habits">
-  <h1>Habits</h1>
+  <h3>Habits</h3>
   {#each Object.values(habitData) as habit}
   <div class="habit">
-    <h2>
+    <h4>
       {habit.title}
-    </h2>
+    </h4>
     <button on:click={() => editHabit(habit.id)}>✏️Edit</button>
     <button on:click={() => deleteHabit(habit.id)}>❌Delete</button>
   </div>
@@ -207,32 +225,64 @@
 <style>
   .header {
     text-align: center;
-    height: 70px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
-  .arrow {
-    font-size: 30px;
-    font-weight: bold;
-    width: 60px;
-    color: #a5a5a5;
-    background: #f3f3f3;
-    border-radius: 5px;
+
+  .header-left, .header-right {
+    display: flex;
+    align-items: center;
   }
+
+  .hamburger{
+    margin-right: 15px;
+    font-size: 15px;
+    width: 35px;
+    margin-bottom: 0;
+  }
+
+  .header-right * {
+    margin-left: 6px;
+  }
+
+  .day-row{
+    display: flex;
+    padding-bottom: 3px;
+  }
+
+  .day-row div {
+    width: 100%;
+    color: grey;
+    text-align: center;
+    font-size: 9px;
+  }
+
   .day-grid {
-    min-height: calc(100% - 70px);
+    min-height: calc(100% - 50px);
     width: 100%;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     grid-template-rows: repeat(6, 1fr);
-    grid-gap: 3px;
+    grid-gap: 1px;
   }
+
   .cell {
-    padding: 5px;
-    border-radius: 5px;
     background: #f5f5f5;
     overflow: hidden;
+  }
+
+  .cell-top-bar{
+    display: flex;
+    justify-content: center;
+  }
+
+  .cell-date {
+    font-size: 12px;
+    padding: 3px 4px;
+    text-align: center;
+    font-weight: normal;
   }
 
   .habit {
@@ -264,13 +314,13 @@
     color: white;
   }
 
-  .today {
-    background: #def4ff;
-    font-weight: bold;
+  .today .cell-date{
+    color: white;
+    background-color: #2196F3;
+    border-radius: 100%;
   }
 
   .other-month {
-    color: #ccc;
-    background: none;
+    opacity: .7;
   }
 </style>
