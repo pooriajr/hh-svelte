@@ -167,7 +167,7 @@
 <div class="header">
   <div class="header-left">
       <button class="hamburger">☰</button>
-      <h2>Habit Helper</h2>
+      <h3>Habit Helper</h3>
   </div>
   <div class="header-right">
     <p>{monthNames[displayDate.getMonth()]} {displayDate.getFullYear()}</p>
@@ -249,7 +249,7 @@
 
   .day-row{
     display: flex;
-    padding-bottom: 3px;
+    padding-bottom: 4px;
   }
 
   .day-row div {
