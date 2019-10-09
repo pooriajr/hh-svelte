@@ -15,47 +15,7 @@
 
   import uuid from 'uuid'
 
-  let habitData = {
-    123: {
-      id: 123,
-      title: 'The Plan',
-      startDate: new Date(2019, 9, 1),
-      endDate: new Date(2019, 9, 5)
-    },
-    234: {
-      id: 234,
-      title: 'Meditation',
-      startDate: new Date(2019, 9, 2),
-      endDate: new Date(2019, 10, 1)
-    }
-  }
-
-  function deleteHabit(id) {
-    if(window.confirm(`Delete this habit? -> ${habitData[id].title}`)){
-      //trigger a rerender 
-      habitData[id] = habitData[id]
-      
-      delete habitData[id]
-    }
-  }
-
-  function editHabit(id) {
-    habitData[id].title = window.prompt('Edit habit title?', habitData[id].title) || habitData[id].title
-  }
-
-  let newHabitTitle = ''
-
-  function addHabit() {
-    const id = uuid()
-    const startDate = startOfDay(new Date())
-     habitData[id] = {
-      id,
-      title: newHabitTitle,
-      startDate,
-      endDate: addDays(startDate, 30)
-    }
-    newHabitTitle = ''
-  }
+// CALENDAR ----------------------------------------------------------------------------
 
   let today = new Date()
   let displayDate = today
@@ -123,7 +83,56 @@
     'November',
     'December'
   ]
+
+  //HABIT CRUD ----------------------------------------------------------------------------
+
+  let habitData = {
+    123: {
+      id: 123,
+      title: 'The Plan',
+      startDate: new Date(2019, 9, 1),
+      endDate: new Date(2019, 9, 5)
+    },
+    234: {
+      id: 234,
+      title: 'Meditation',
+      startDate: new Date(2019, 9, 2),
+      endDate: new Date(2019, 10, 1)
+    }
+  }
+
+  let newHabitTitle = ''
+
+  function addHabit() {
+    const id = uuid()
+    const startDate = startOfDay(new Date())
+     habitData[id] = {
+      id,
+      title: newHabitTitle,
+      startDate,
+      endDate: addDays(startDate, 30)
+    }
+    newHabitTitle = ''
+  }
+
+  function editHabit(id) {
+    habitData[id].title = window.prompt('Edit habit title?', habitData[id].title) || habitData[id].title
+  }
+
+  function deleteHabit(id) {
+    if(window.confirm(`Delete this habit? -> ${habitData[id].title}`)){
+      //trigger a rerender 
+      habitData[id] = habitData[id]
+      
+      delete habitData[id]
+    }
+  }
 </script>
+
+
+
+
+
 
 <div class="header">
   <div class="arrow" on:click="{prevMonth}">&lt</div>
@@ -158,6 +167,11 @@
       <button>Add New 30 Day Habit</button>
   </form>
 </div>
+
+
+
+
+
 
 <style>
   .header {
