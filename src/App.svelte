@@ -167,10 +167,13 @@
 <div class="header">
   <div class="header-left">
       <button class="hamburger">☰</button>
-      <h3>Habit Helper</h3>
+      <img class="logo" src="habit-helper-logo.svg">
+      <h3 class="logo-type long">Habit Helper</h3>
+      <h3 class="logo-type abbr">HH</h3>
   </div>
   <div class="header-right">
-    <p>{monthNames[displayDate.getMonth()]} {displayDate.getFullYear()}</p>
+    <p class="long">{monthNames[displayDate.getMonth()]} {displayDate.getFullYear()}</p>
+    <p class="abbr">{monthNames[displayDate.getMonth()].substring(0,3)} '{String(displayDate.getFullYear()).substring(2)}</p>
     <button class="arrow" on:click="{prevMonth}">&lsaquo</button>
     <button class="arrow" on:click="{nextMonth}">&rsaquo</button>
     <button on:click="{() => displayDate = today}">Today</button>
@@ -236,6 +239,15 @@
     align-items: center;
   }
 
+  .logo{
+    width: 20px;
+    margin-right: 5px;
+  }
+
+  .logo-type{
+    font-size: 27px;
+  }
+
   .hamburger{
     margin-right: 15px;
     font-size: 15px;
@@ -250,6 +262,18 @@
   .day-row{
     display: flex;
     padding-bottom: 4px;
+  }
+
+  .long{
+    display: none;
+  }
+  @media (min-width: 600px){
+    .abbr {
+      display: none
+    }
+    .long{
+      display: initial;
+    }
   }
 
   .day-row div {
