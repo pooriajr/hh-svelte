@@ -10,7 +10,8 @@
     subMonths,
     areIntervalsOverlapping,
     isWithinInterval,
-    startOfDay
+    startOfDay,
+    lightFormat
   } from 'date-fns'
 
   import uuid from 'uuid'
@@ -56,6 +57,15 @@
       return Object.assign(day, { habits: habitsForThisDay })
     })
 
+    //6. add records for every day
+    dayArray = dayArray.map(day => {
+      let newHabits = day.habits.map(habit => {
+        let recordId = habit.id + '-' + lightFormat(day.date, 'yyyy-MM-dd')
+        return Object.assign({}, habit, {recordId}) 
+      })
+      return Object.assign({}, day, {habits: newHabits})
+    })
+
     return dayArray
   }
 
@@ -67,7 +77,7 @@
     displayDate = subMonths(displayDate, 1)
   }
 
-  $: dayArray = generateDayArray(displayDate, habitData)
+  $: dayArray = generateDayArray(displayDate, habitData, recordData)
 
   let monthNames = [
     'January',
@@ -128,6 +138,19 @@
       delete habitData[id]
     }
   }
+
+  // RECORD CRUD ----------------------------------------------------------------------------
+
+  let recordData = {
+    '123-2019-10-01': true,
+    '123-2019-10-02': false,
+    '123-2019-10-03': true,
+    '234-2019-10-02': true,
+    '234-2019-10-03': true,
+    '234-2019-10-09': false,
+    '234-2019-10-10': true,
+  }
+
 </script>
 
 
@@ -144,7 +167,7 @@
   {#each dayArray as day}
   <div class="cell" class:other-month="{!isSameMonth(day.date, displayDate)}" class:today="{isSameDay(day.date,today)}">
     {day.date.getDate()} {#each day.habits as habit}
-    <div>
+    <div class="cell-habit" class:success="{recordData[habit.recordId] === true}" class:failure="{recordData[habit.recordId] === false}">
       {habit.title}
     </div>
     {/each}
@@ -201,7 +224,7 @@
   .cell {
     padding: 5px;
     border-radius: 5px;
-    background: #f3f3f3;
+    background: #f5f5f5;
   }
 
   .habit {
@@ -209,8 +232,25 @@
     align-items: center;
   }
 
+  .cell-habit{
+    padding: 3px;
+    border-radius: 3px;
+    margin-bottom: 2px;
+    font-size: 14px;
+  } 
+
+  .cell-habit.success {
+    background: #8bc34a;
+    color: white;
+  }
+
+  .cell-habit.failure {
+    background: #f44336;
+    color: white;
+  }
+
   .today {
-    background: lightblue;
+    background: #def4ff;
     font-weight: bold;
   }
 
