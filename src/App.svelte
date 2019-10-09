@@ -9,7 +9,8 @@
     addMonths,
     subMonths,
     areIntervalsOverlapping,
-    isWithinInterval
+    isWithinInterval,
+    startOfDay
   } from 'date-fns'
 
   let habitData = {
@@ -24,29 +25,39 @@
       title: 'Meditation',
       startDate: new Date(2019, 9, 2),
       endDate: new Date(2019, 10, 1)
-    },
-    345: {
-      id: 345,
-      title: 'Veganism',
-      startDate: new Date(2019, 8, 1),
-      endDate: new Date(2019, 8, 25)
     }
   }
 
-  // let recordData = {
-  //   '2019-10-6': {
-  //     123: true,
-  //     234: false
-  //   },
-  //   '2019-10-4': {
-  //     123: true
-  //   }
-  // }
+  function deleteHabit(id) {
+    if(window.confirm(`Delete this habit? -> ${habitData[id].title}`)){
+      //trigger a rerender 
+      habitData[id] = habitData[id]
+      
+      delete habitData[id]
+    }
+  }
+
+  function editHabit(id) {
+    habitData[id].title = window.prompt('Edit habit title?', habitData[id].title)
+  }
+
+  let newHabitTitle = ''
+
+  function addHabit() {
+    const startDate = startOfDay(new Date())
+     habitData[345] = {
+      id: 345,
+      title: newHabitTitle,
+      startDate,
+      endDate: addDays(startDate, 30)
+    }
+    newHabitTitle = ''
+  }
 
   let today = new Date()
   let displayDate = today
 
-  function generateDayArray(startDate) {
+  function generateDayArray(startDate, habitData) {
     let dateArray
     // 1. get first and last days of the display range,
     // * based on the first day of the first week of the month of the displayDate.
@@ -93,7 +104,7 @@
     displayDate = subMonths(displayDate, 1)
   }
 
-  $: dayArray = generateDayArray(displayDate)
+  $: dayArray = generateDayArray(displayDate, habitData)
 
   let monthNames = [
     'January',
@@ -127,11 +138,28 @@
   </div>
   {/each}
 </div>
+<div class="habits">
+  <h1>Habits</h1>
+  {#each Object.values(habitData) as habit}
+  <div class="habit">
+    <h2>
+      {habit.title}
+    </h2>
+    <button on:click={() => editHabit(habit.id)}>✏️Edit</button>
+    <button on:click={() => deleteHabit(habit.id)}>❌Delete</button>
+  </div>
+  {/each}
+  <form on:submit|preventDefault={addHabit}>
+      <label>Title</label>
+      <input bind:value={newHabitTitle}>
+      <button>Add New 30 Day Habit</button>
+  </form>
+</div>
 
 <style>
   .header {
     text-align: center;
-    height: 80px;
+    height: 70px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -146,16 +174,21 @@
     border-radius: 5px;
   }
   .day-grid {
-    height: calc(100% - 80px);
+    height: calc(100% - 70px);
     display: grid;
-    grid-template-columns: repeat(7, auto);
-    grid-template-rows: repeat(6, auto);
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(6, 1fr);
     grid-gap: 3px;
   }
   .cell {
     padding: 5px;
     border-radius: 5px;
     background: #f3f3f3;
+  }
+
+  .habit {
+    display: flex;
+    align-items: center;
   }
 
   .today {
