@@ -13,6 +13,8 @@
     startOfDay
   } from 'date-fns'
 
+  import uuid from 'uuid'
+
   let habitData = {
     123: {
       id: 123,
@@ -44,9 +46,10 @@
   let newHabitTitle = ''
 
   function addHabit() {
+    const id = uuid()
     const startDate = startOfDay(new Date())
-     habitData[345] = {
-      id: 345,
+     habitData[id] = {
+      id,
       title: newHabitTitle,
       startDate,
       endDate: addDays(startDate, 30)
