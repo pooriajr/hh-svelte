@@ -104,6 +104,7 @@
   let newHabitTitle = ''
 
   function addHabit() {
+    if(!newHabitTitle) return window.alert('Need a title for your new habit')
     const id = uuid()
     const startDate = startOfDay(new Date())
      habitData[id] = {
@@ -163,7 +164,7 @@
   {/each}
   <form on:submit|preventDefault={addHabit}>
       <label>Title</label>
-      <input bind:value={newHabitTitle}>
+      <input required bind:value={newHabitTitle}>
       <button>Add New 30 Day Habit</button>
   </form>
 </div>
