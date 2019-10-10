@@ -1,4 +1,7 @@
 <script>
+  import { fade } from 'svelte/transition'
+  import { flip } from 'svelte/animate'
+
   import {
     startOfMonth,
     startOfWeek,
@@ -187,8 +190,13 @@
         <div class="section-title">Habits</div>
         <button on:click="{addHabit}">Add New</button>
       </div>
-      {#each Object.values(habitData) as habit}
-      <div class="habit" class:editMode="{habit.id === editModeId}">
+      {#each Object.values(habitData) as habit (habit.id)}
+      <div
+        class="habit"
+        class:editMode="{habit.id === editModeId}"
+        transition:fade="{{duration: 200}}"
+        animate:flip="{{duration: 200}}"
+      >
         <div class="fields">
           <div>
             <input
@@ -205,7 +213,9 @@
           <button on:click="{() => {editModeId = ''}}">Done</button>
           <button class="delete" on:click="{() => { deleteHabit(habit.id)}}">Delete</button>
           {:else}
-          <button on:click="{() => {editModeId = habit.id}}">Edit</button>
+          <button on:click="{() => {editModeId = habit.id}}">
+            Edit
+          </button>
           {/if}
         </div>
       </div>
@@ -232,12 +242,13 @@
         <div class="cell-top-bar">
           <span class="cell-date">{day.date.getDate()}</span>
         </div>
-        {#each day.habits as habit}
+        {#each day.habits as habit (habit.id)}
         <button
           class="cell-habit"
           on:click="{() => cycleRecord(habit.recordId)}"
           class:success="{recordData[habit.recordId] === true}"
           class:failure="{recordData[habit.recordId] === false}"
+          transition:fade="{{duration: 200}}"
         >
           {habit.title || '?'}
         </button>
@@ -301,16 +312,14 @@
 
   .sidebar {
     width: 0px;
-    transition: 0.2s;
+    transition: 0.1s;
     padding-right: 8px;
     position: relative;
     left: -220px;
-    opacity: 0;
   }
   .sidebar.active {
     width: 220px;
     left: 0;
-    opacity: 1;
   }
   @media (min-width: 600px) {
     .sidebar {
