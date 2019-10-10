@@ -95,11 +95,12 @@
 
   //HABIT SCORE ----------------------------------------------------------------------------
 
-  let habitScore, maxPoints, earnedPoints, rankProgress, currentRank
+  let habitScore, maxPoints, earnedPoints, rankProgress, currentRank, prevHabitScore
 
   function calcHabitScore(habitData) {
     maxPoints = 0
     earnedPoints = 0
+    prevHabitScore = habitScore
 
     //1. Iterate over every Habit
     Object.values(habitData).forEach(habit => {
@@ -118,6 +119,19 @@
     habitScore = Math.floor(100 * (earnedPoints / maxPoints))
     rankProgress = ((habitScore % 10) / 10) * 100
     currentRank = Math.floor(habitScore * 0.1) + 1
+
+    //7. Apply color to progress bar based on whether score went up or down
+    if (habitScore > prevHabitScore) {
+      progressBarColor = '#8BC34A'
+      window.setTimeout(() => {
+        progressBarColor = '#2196f3;'
+      }, 400)
+    } else if (habitScore < prevHabitScore) {
+      progressBarColor = '#f44336'
+      window.setTimeout(() => {
+        progressBarColor = '#2196f3;'
+      }, 400)
+    }
   }
 
   $: calcHabitScore(habitData)
@@ -184,6 +198,7 @@
   let sidebarActive = false
   let deleteConfirmId = ''
   let editModeId = ''
+  let progressBarColor = '#2196f3'
 
   function toggleSidebar() {
     sidebarActive = !sidebarActive
@@ -220,7 +235,11 @@
         <button>?</button>
       </div>
       <div class="current-rank">Rank {currentRank}</div>
-      <div class="rank-progress-bar" style="{`width: ${rankProgress}%`}"></div>
+      <div
+        class="rank-progress-bar"
+        id="progress-bar"
+        style="{`width: ${rankProgress}%; background: ${progressBarColor}`}"
+      ></div>
     </div>
     <div class="section habits">
       <div class="section-top">
@@ -386,7 +405,6 @@
   }
   .rank-progress-bar {
     height: 5px;
-    background: #2196f3;
     border-radius: 5px 0px 0px 5px;
     min-width: 2px;
     transition: 0.8s;
