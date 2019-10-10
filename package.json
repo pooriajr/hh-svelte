@@ -13,8 +13,7 @@
   },
   "dependencies": {
     "date-fns": "^2.4.1",
-    "sirv-cli": "^0.4.4",
-    "uuid": "^3.3.3"
+    "sirv-cli": "^0.4.4"
   },
   "scripts": {
     "build": "rollup -c",

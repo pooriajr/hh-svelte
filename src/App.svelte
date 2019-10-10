@@ -17,7 +17,11 @@
     lightFormat
   } from 'date-fns'
 
-  import uuid from 'uuid'
+  let uuid = function b(a) {
+    return a
+      ? (a ^ ((Math.random() * 16) >> (a / 4))).toString(16)
+      : ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, b)
+  }
 
   // CALENDAR ----------------------------------------------------------------------------
 
@@ -97,6 +101,30 @@
     'December'
   ]
 
+  //HABIT SCORE ----------------------------------------------------------------------------
+
+  let habitScore
+
+  function calcHabitScore(habitData, recordData) {
+    const maxPoints = Object.values(habitData).reduce((total, habit) => {
+      return total + getHabitDuration(habit) * habit.importance
+    }, 0)
+
+    let earnedPoints = 0
+
+    for (const id in recordData) {
+      if (recordData[id] === true) {
+        earnedPoints += habitData[getHabitIdFromRecordId(id)].importance
+      }
+      if (recordData[id] === false) {
+        earnedPoints -= habitData[getHabitIdFromRecordId(id)].importance * 2
+      }
+    }
+    habitScore = Math.floor(100 * (earnedPoints / maxPoints))
+  }
+
+  $: calcHabitScore(habitData, recordData)
+
   //HABIT CRUD ----------------------------------------------------------------------------
 
   let habitData = {
@@ -104,13 +132,15 @@
       id: 123,
       title: 'The Plan',
       startDate: new Date(2019, 8, 1),
-      endDate: new Date(2019, 9, 5)
+      endDate: new Date(2019, 9, 5),
+      importance: 1
     },
     234: {
       id: 234,
       title: 'Meditation',
       startDate: new Date(2019, 9, 2),
-      endDate: new Date(2019, 10, 1)
+      endDate: new Date(2019, 10, 1),
+      importance: 1
     }
   }
 
@@ -120,6 +150,7 @@
     habitData[id] = {
       id,
       title: '',
+      importance: 1,
       startDate,
       endDate: addDays(startDate, 30)
     }
@@ -159,6 +190,7 @@
   }
 
   // UI Controls ----------------------------------------------------------------------------
+
   let sidebarActive = false
   let editModeId
   let editTitle
@@ -169,6 +201,15 @@
 
   function setEditModeId(id) {
     editModeId = id
+  }
+
+  // Helper Functions ------------------------------------------------------------------------
+  function getHabitDuration(habit) {
+    return eachDayOfInterval({ start: habit.startDate, end: habit.endDate }).length
+  }
+
+  function getHabitIdFromRecordId(recordId) {
+    return recordId.slice(0, -1 * '-xxxx-xx-xx'.length)
   }
 </script>
 
@@ -191,7 +232,14 @@
 </div>
 <div class="body">
   <div class="sidebar" class:active="{sidebarActive}">
-    <div class="habits">
+    <div class="section score">
+      <div class="section-top">
+        <div class="section-title">Habit Score</div>
+        <button>?</button>
+      </div>
+      <h1>{habitScore}</h1>
+    </div>
+    <div class="section habits">
       <div class="section-top">
         <div class="section-title">Habits</div>
         <button on:click="{addHabit}">Add New</button>
@@ -259,7 +307,6 @@
           on:click="{() => cycleRecord(habit.recordId)}"
           class:success="{recordData[habit.recordId] === true}"
           class:failure="{recordData[habit.recordId] === false}"
-          transition:fade="{{duration: 200}}"
         >
           {habit.title || '?'}
         </button>
@@ -432,7 +479,7 @@
     justify-content: center;
   }
   .cell-date {
-    font-size: 12px;
+    font-size: 11px;
     padding: 3px 4px;
     text-align: center;
     font-weight: normal;
@@ -462,7 +509,11 @@
   .today .cell-date {
     color: white;
     background-color: #2196f3;
+    width: 18px;
+    height: 18px;
+    margin-bottom: 1px;
     border-radius: 100%;
+    line-height: 1;
   }
 
   .other-month {
