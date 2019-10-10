@@ -45,7 +45,8 @@
     //3. turn each item in the array into a day object
     let dayArray = dateArray.map(date => {
       return new Object({
-        date: date
+        date: date,
+        fDate: lightFormat(date, 'yyyy-MM-dd')
       })
     })
 
@@ -64,14 +65,14 @@
       return Object.assign(day, { habits: habitsForThisDay })
     })
 
-    //6. add records for every day
-    dayArray = dayArray.map(day => {
-      let newHabits = day.habits.map(habit => {
-        let recordId = habit.id + '-' + lightFormat(day.date, 'yyyy-MM-dd')
-        return Object.assign({}, habit, { recordId })
-      })
-      return Object.assign({}, day, { habits: newHabits })
-    })
+    // //6. add records for every day
+    // dayArray = dayArray.map(day => {
+    //   let newHabits = day.habits.map(habit => {
+    //     let recordId = habit.id + '-' + lightFormat(day.date, 'yyyy-MM-dd')
+    //     return Object.assign({}, habit, { recordId })
+    //   })
+    //   return Object.assign({}, day, { habits: newHabits })
+    // })
 
     return dayArray
   }
@@ -133,14 +134,25 @@
       title: 'The Plan',
       startDate: new Date(2019, 8, 1),
       endDate: new Date(2019, 9, 5),
-      importance: 1
+      importance: 1,
+      records: {
+        '2019-10-01': true,
+        '2019-10-02': false,
+        '2019-10-03': true
+      }
     },
     234: {
       id: 234,
       title: 'Meditation',
       startDate: new Date(2019, 9, 2),
       endDate: new Date(2019, 10, 1),
-      importance: 1
+      importance: 1,
+      records: {
+        '2019-10-02': true,
+        '2019-10-03': true,
+        '2019-10-09': false,
+        '2019-10-10': true
+      }
     }
   }
 
@@ -152,14 +164,11 @@
       title: '',
       importance: 1,
       startDate,
-      endDate: addDays(startDate, 30)
+      endDate: addDays(startDate, 30),
+      records: {}
     }
     //automatically start editing new habit
     editModeId = id
-  }
-
-  function editHabit(id) {
-    habitData[id].title = window.prompt('Edit habit title?', habitData[id].title) || habitData[id].title
   }
 
   function deleteHabit(id) {
@@ -171,23 +180,29 @@
     }
   }
 
+  function cycleRecord(habitId, fDate) {
+    if (habitData[habitId].records[fDate] === undefined) habitData[habitId].records[fDate] = true
+    else if (habitData[habitId].records[fDate] === true) habitData[habitId].records[fDate] = false
+    else if (habitData[habitId].records[fDate] === false) habitData[habitId].records[fDate] = undefined
+  }
+
   // RECORD CRUD ----------------------------------------------------------------------------
 
   let recordData = {
-    '123-2019-10-01': true,
-    '123-2019-10-02': false,
-    '123-2019-10-03': true,
-    '234-2019-10-02': true,
-    '234-2019-10-03': true,
-    '234-2019-10-09': false,
-    '234-2019-10-10': true
+    // '123-2019-10-01': true,
+    // '123-2019-10-02': false,
+    // '123-2019-10-03': true,
+    // '234-2019-10-02': true,
+    // '234-2019-10-03': true,
+    // '234-2019-10-09': false,
+    // '234-2019-10-10': true
   }
 
-  function cycleRecord(id) {
-    if (recordData[id] === undefined) recordData[id] = true
-    else if (recordData[id] === true) recordData[id] = false
-    else if (recordData[id] === false) recordData[id] = undefined
-  }
+  // function cycleRecord(id) {
+  //   if (recordData[id] === undefined) recordData[id] = true
+  //   else if (recordData[id] === true) recordData[id] = false
+  //   else if (recordData[id] === false) recordData[id] = undefined
+  // }
 
   // UI Controls ----------------------------------------------------------------------------
 
@@ -304,9 +319,9 @@
         {#each day.habits as habit (habit.id)}
         <button
           class="cell-habit"
-          on:click="{() => cycleRecord(habit.recordId)}"
-          class:success="{recordData[habit.recordId] === true}"
-          class:failure="{recordData[habit.recordId] === false}"
+          on:click="{() => cycleRecord(habit.id, day.fDate)}"
+          class:success="{habit.records[day.fDate] === true}"
+          class:failure="{habit.records[day.fDate] === false}"
         >
           {habit.title || '?'}
         </button>
