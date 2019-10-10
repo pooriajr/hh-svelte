@@ -157,38 +157,63 @@
     else if (recordData[id] === false) recordData[id] = undefined
   }
 
+  // UI Controls ----------------------------------------------------------------------------
+  let sidebarActive = false
+
+  function toggleSidebar() {
+    sidebarActive = !sidebarActive
+  }
 </script>
-
-
 
 
 
 
 <div class="header">
   <div class="header-left">
-      <button class="hamburger">☰</button>
+      <button class="mobile hamburger" on:click="{toggleSidebar}">{ sidebarActive ? '✕' : '☰' }</button>
       <img class="logo" src="habit-helper-logo.svg">
-      <h3 class="logo-type long">Habit Helper</h3>
-      <h3 class="logo-type abbr">HH</h3>
+      <h3 class="logo-type desktop">Habit Helper</h3>
+      <h3 class="logo-type mobile">HH</h3>
   </div>
   <div class="header-right">
-    <p class="long">{monthNames[displayDate.getMonth()]} {displayDate.getFullYear()}</p>
-    <p class="abbr">{monthNames[displayDate.getMonth()].substring(0,3)} '{String(displayDate.getFullYear()).substring(2)}</p>
+    <p class="desktop">{monthNames[displayDate.getMonth()]} {displayDate.getFullYear()}</p>
+    <p class="mobile">{monthNames[displayDate.getMonth()].substring(0,3)} '{String(displayDate.getFullYear()).substring(2)}</p>
     <button class="arrow" on:click="{prevMonth}">&lsaquo</button>
     <button class="arrow" on:click="{nextMonth}">&rsaquo</button>
     <button on:click="{() => displayDate = today}">Today</button>
   </div>
 </div>
-<div class="day-row">
-  <div>SUN</div>
-  <div>MON</div>
-  <div>TUE</div>
-  <div>WED</div>
-  <div>THU</div>
-  <div>FRI</div>
-  <div>SAT</div>
-</div>
-<div class="day-grid">
+<div class="body">
+  <div class="sidebar" class:active="{sidebarActive}">
+    <div class="habits">
+      <h3>Habits</h3>
+      {#each Object.values(habitData) as habit}
+      <div class="habit">
+        <h4>
+            {habit.title}
+          </h4>
+          <button on:click={() => editHabit(habit.id)}>✏️Edit</button>
+          <button on:click={() => deleteHabit(habit.id)}>❌Delete</button>
+        </div>
+        {/each}
+        <form on:submit|preventDefault={addHabit}>
+            <label>Title</label>
+            <input required bind:value={newHabitTitle}>
+            <button>Add New 30 Day Habit</button>
+          </form>
+      </div>
+    </div>
+<div class="calendar">
+  <div class="day-row">
+    <div>SUN</div>
+    <div>MON</div>
+    <div>TUE</div>
+    <div>WED</div>
+    <div>THU</div>
+    <div>FRI</div>
+    <div>SAT</div>
+  </div>
+  <div class="day-grid">
   {#each dayArray as day}
   <div class="cell" class:other-month="{!isSameMonth(day.date, displayDate)}" class:today="{isSameDay(day.date,today)}">
     <div class="cell-top-bar">
@@ -198,27 +223,13 @@
       <button class="cell-habit" on:click="{() => cycleRecord(habit.recordId)}" class:success="{recordData[habit.recordId] === true}" class:failure="{recordData[habit.recordId] === false}">
         {habit.title}
       </button>
+      {/each}
+    </div>
     {/each}
   </div>
-  {/each}
 </div>
-<div class="habits">
-  <h3>Habits</h3>
-  {#each Object.values(habitData) as habit}
-  <div class="habit">
-    <h4>
-      {habit.title}
-    </h4>
-    <button on:click={() => editHabit(habit.id)}>✏️Edit</button>
-    <button on:click={() => deleteHabit(habit.id)}>❌Delete</button>
-  </div>
-  {/each}
-  <form on:submit|preventDefault={addHabit}>
-      <label>Title</label>
-      <input required bind:value={newHabitTitle}>
-      <button>Add New 30 Day Habit</button>
-  </form>
 </div>
+
 
 
 
@@ -243,7 +254,6 @@
     width: 20px;
     margin-right: 5px;
   }
-
   .logo-type{
     font-size: 27px;
   }
@@ -259,23 +269,50 @@
     margin-left: 6px;
   }
 
-  .day-row{
-    display: flex;
-    padding-bottom: 4px;
-  }
-
-  .long{
+  .desktop{
     display: none;
   }
   @media (min-width: 600px){
-    .abbr {
+    .mobile {
       display: none
     }
-    .long{
+    .desktop{
       display: initial;
     }
   }
 
+  .body{
+    display: flex;
+    min-height: calc(100% - 50px);
+  }
+
+  .sidebar {
+    width: 0px;
+    transition: .2s;
+  }
+  .sidebar.active{
+    width: 220px;
+  }
+  @media (min-width: 600px) {
+    .sidebar {
+      width: 220px;
+    }
+  }
+
+  .habit {
+    display: flex;
+    align-items: center;
+  }
+
+  .calendar {
+    width: 100%;
+    background: white;
+  }
+
+  .day-row{
+    display: flex;
+    padding-bottom: 4px;
+  }
   .day-row div {
     width: 100%;
     color: grey;
@@ -284,7 +321,6 @@
   }
 
   .day-grid {
-    min-height: calc(100% - 50px);
     width: 100%;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -296,24 +332,16 @@
     background: #f5f5f5;
     overflow: hidden;
   }
-
   .cell-top-bar{
     display: flex;
     justify-content: center;
   }
-
   .cell-date {
     font-size: 12px;
     padding: 3px 4px;
     text-align: center;
     font-weight: normal;
   }
-
-  .habit {
-    display: flex;
-    align-items: center;
-  }
-
   .cell-habit{
     display: block;
     width: 100%;
@@ -327,12 +355,10 @@
     cursor: pointer;
     white-space: nowrap;
   } 
-
   .cell-habit.success {
     background: #8bc34a;
     color: white;
   }
-
   .cell-habit.failure {
     background: #f44336;
     color: white;
@@ -345,6 +371,7 @@
   }
 
   .other-month {
-    opacity: .7;
+    background: white;
+    color: #ccc
   }
 </style>
