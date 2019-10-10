@@ -246,7 +246,7 @@
         <div class="section-title">Habits</div>
         <button on:click="{addHabit}">Add New</button>
       </div>
-      {#each Object.values(habitData) as habit (habit.id)}
+      {#each Object.values(habitData).reverse() as habit (habit.id)}
       <div
         class="habit"
         class:editMode="{habit.id === editModeId}"
@@ -312,7 +312,7 @@
         <div class="cell-top-bar">
           <span class="cell-date">{day.date.getDate()}</span>
         </div>
-        {#each day.habits as habit (habit.id)}
+        {#each day.habits.reverse() as habit (habit.id)}
         <button
           class="cell-habit"
           on:click="{() => cycleRecord(habit.id, day.fDate)}"
