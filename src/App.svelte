@@ -65,15 +65,6 @@
       return Object.assign(day, { habits: habitsForThisDay })
     })
 
-    // //6. add records for every day
-    // dayArray = dayArray.map(day => {
-    //   let newHabits = day.habits.map(habit => {
-    //     let recordId = habit.id + '-' + lightFormat(day.date, 'yyyy-MM-dd')
-    //     return Object.assign({}, habit, { recordId })
-    //   })
-    //   return Object.assign({}, day, { habits: newHabits })
-    // })
-
     return dayArray
   }
 
@@ -85,7 +76,7 @@
     displayDate = subMonths(displayDate, 1)
   }
 
-  $: dayArray = generateDayArray(displayDate, habitData, recordData)
+  $: dayArray = generateDayArray(displayDate, habitData)
 
   let monthNames = [
     'January',
@@ -106,25 +97,28 @@
 
   let habitScore
 
-  function calcHabitScore(habitData, recordData) {
-    const maxPoints = Object.values(habitData).reduce((total, habit) => {
-      return total + getHabitDuration(habit) * habit.importance
-    }, 0)
-
+  function calcHabitScore(habitData) {
+    let maxPoints = 0
     let earnedPoints = 0
 
-    for (const id in recordData) {
-      if (recordData[id] === true) {
-        earnedPoints += habitData[getHabitIdFromRecordId(id)].importance
-      }
-      if (recordData[id] === false) {
-        earnedPoints -= habitData[getHabitIdFromRecordId(id)].importance * 2
-      }
-    }
+    //1. Iterate over every Habit
+    Object.values(habitData).forEach(habit => {
+      //2. For every day in its duration, add its importance to the maxPoints
+      maxPoints += getHabitDuration(habit) * habit.importance
+      //3. Iterate over the records for this habit
+      Object.values(habit.records).forEach(record => {
+        //4. For every successful record, add the habit's importance to earnedPoints
+        if (record === true) earnedPoints += habit.importance
+        //5. For every failure record, subtract the habit's importance from earnedPoints + a penalty that scales cubicly with importance
+        else if (record === false) earnedPoints -= habit.importance * habit.importance
+      })
+    })
+
+    //6. Calculate the score as the percentage earned from the max possible points
     habitScore = Math.floor(100 * (earnedPoints / maxPoints))
   }
 
-  $: calcHabitScore(habitData, recordData)
+  $: calcHabitScore(habitData)
 
   //HABIT CRUD ----------------------------------------------------------------------------
 
@@ -186,24 +180,6 @@
     else if (habitData[habitId].records[fDate] === false) habitData[habitId].records[fDate] = undefined
   }
 
-  // RECORD CRUD ----------------------------------------------------------------------------
-
-  let recordData = {
-    // '123-2019-10-01': true,
-    // '123-2019-10-02': false,
-    // '123-2019-10-03': true,
-    // '234-2019-10-02': true,
-    // '234-2019-10-03': true,
-    // '234-2019-10-09': false,
-    // '234-2019-10-10': true
-  }
-
-  // function cycleRecord(id) {
-  //   if (recordData[id] === undefined) recordData[id] = true
-  //   else if (recordData[id] === true) recordData[id] = false
-  //   else if (recordData[id] === false) recordData[id] = undefined
-  // }
-
   // UI Controls ----------------------------------------------------------------------------
 
   let sidebarActive = false
@@ -221,10 +197,6 @@
   // Helper Functions ------------------------------------------------------------------------
   function getHabitDuration(habit) {
     return eachDayOfInterval({ start: habit.startDate, end: habit.endDate }).length
-  }
-
-  function getHabitIdFromRecordId(recordId) {
-    return recordId.slice(0, -1 * '-xxxx-xx-xx'.length)
   }
 </script>
 
