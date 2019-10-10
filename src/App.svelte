@@ -95,11 +95,11 @@
 
   //HABIT SCORE ----------------------------------------------------------------------------
 
-  let habitScore
+  let habitScore, maxPoints, earnedPoints, rankProgress, currentRank
 
   function calcHabitScore(habitData) {
-    let maxPoints = 0
-    let earnedPoints = 0
+    maxPoints = 0
+    earnedPoints = 0
 
     //1. Iterate over every Habit
     Object.values(habitData).forEach(habit => {
@@ -116,6 +116,8 @@
 
     //6. Calculate the score as the percentage earned from the max possible points
     habitScore = Math.floor(100 * (earnedPoints / maxPoints))
+    rankProgress = ((habitScore % 10) / 10) * 100
+    currentRank = Math.floor(habitScore * 0.1) + 1
   }
 
   $: calcHabitScore(habitData)
@@ -126,8 +128,8 @@
     123: {
       id: 123,
       title: 'The Plan',
-      startDate: new Date(2019, 8, 1),
-      endDate: new Date(2019, 9, 5),
+      startDate: new Date(2019, 9, 1),
+      endDate: new Date(2019, 9, 11),
       importance: 1,
       records: {
         '2019-10-01': true,
@@ -214,10 +216,11 @@
   <div class="sidebar" class:active="{sidebarActive}">
     <div class="section score">
       <div class="section-top">
-        <div class="section-title">Habit Score</div>
+        <div class="section-title">Habit Rank</div>
         <button>?</button>
       </div>
-      <h1>{habitScore}</h1>
+      <div class="current-rank">Rank {currentRank}</div>
+      <div class="rank-progress-bar" style="{`width: ${rankProgress}%`}"></div>
     </div>
     <div class="section habits">
       <div class="section-top">
@@ -375,10 +378,28 @@
     }
   }
 
+  .current-rank {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 2px;
+    color: #2196f3;
+  }
+  .rank-progress-bar {
+    height: 5px;
+    background: #2196f3;
+    border-radius: 5px 0px 0px 5px;
+    min-width: 2px;
+    transition: 0.8s;
+  }
+
+  .section {
+    margin-bottom: 20px;
+  }
   .section-top {
     display: flex;
     justify-content: space-between;
     border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
   }
   .section-top .section-title {
     font-size: 16px;
