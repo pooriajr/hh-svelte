@@ -16,7 +16,7 @@
 
   import uuid from 'uuid'
 
-// CALENDAR ----------------------------------------------------------------------------
+  // CALENDAR ----------------------------------------------------------------------------
 
   let today = new Date()
   let displayDate = today
@@ -61,9 +61,9 @@
     dayArray = dayArray.map(day => {
       let newHabits = day.habits.map(habit => {
         let recordId = habit.id + '-' + lightFormat(day.date, 'yyyy-MM-dd')
-        return Object.assign({}, habit, {recordId}) 
+        return Object.assign({}, habit, { recordId })
       })
-      return Object.assign({}, day, {habits: newHabits})
+      return Object.assign({}, day, { habits: newHabits })
     })
 
     return dayArray
@@ -111,19 +111,16 @@
     }
   }
 
-  let newHabitTitle = ''
-
   function addHabit() {
-    if(!newHabitTitle) return window.alert('Need a title for your new habit')
     const id = uuid()
     const startDate = startOfDay(new Date())
-     habitData[id] = {
+    habitData[id] = {
       id,
-      title: newHabitTitle,
+      title: 'New Habit',
       startDate,
       endDate: addDays(startDate, 30)
     }
-    newHabitTitle = ''
+    editModeId = id
   }
 
   function editHabit(id) {
@@ -131,10 +128,10 @@
   }
 
   function deleteHabit(id) {
-    if(window.confirm(`Delete this habit? -> ${habitData[id].title}`)){
-      //trigger a rerender 
+    if (window.confirm(`Delete this habit? -> ${habitData[id].title}`)) {
+      //trigger a rerender
       habitData[id] = habitData[id]
-      
+
       delete habitData[id]
     }
   }
@@ -148,7 +145,7 @@
     '234-2019-10-02': true,
     '234-2019-10-03': true,
     '234-2019-10-09': false,
-    '234-2019-10-10': true,
+    '234-2019-10-10': true
   }
 
   function cycleRecord(id) {
@@ -159,25 +156,25 @@
 
   // UI Controls ----------------------------------------------------------------------------
   let sidebarActive = false
+  let editModeId = ''
 
   function toggleSidebar() {
     sidebarActive = !sidebarActive
   }
 </script>
 
-
-
-
 <div class="header">
   <div class="header-left">
-      <button class="mobile hamburger" on:click="{toggleSidebar}">{ sidebarActive ? '✕' : '☰' }</button>
-      <img class="logo" src="habit-helper-logo.svg">
-      <h3 class="logo-type desktop">Habit Helper</h3>
-      <h3 class="logo-type mobile">HH</h3>
+    <button class="mobile hamburger" on:click="{toggleSidebar}">{ sidebarActive ? '✕' : '☰' }</button>
+    <img class="logo" src="habit-helper-logo.svg" />
+    <h3 class="logo-type desktop">Habit Helper</h3>
+    <h3 class="logo-type mobile">HH</h3>
   </div>
   <div class="header-right">
     <p class="desktop">{monthNames[displayDate.getMonth()]} {displayDate.getFullYear()}</p>
-    <p class="mobile">{monthNames[displayDate.getMonth()].substring(0,3)} '{String(displayDate.getFullYear()).substring(2)}</p>
+    <p class="mobile">
+      {monthNames[displayDate.getMonth()].substring(0,3)} '{String(displayDate.getFullYear()).substring(2)}
+    </p>
     <button class="arrow" on:click="{prevMonth}">&lsaquo</button>
     <button class="arrow" on:click="{nextMonth}">&rsaquo</button>
     <button on:click="{() => displayDate = today}">Today</button>
@@ -186,55 +183,70 @@
 <div class="body">
   <div class="sidebar" class:active="{sidebarActive}">
     <div class="habits">
-      <h3>Habits</h3>
-      {#each Object.values(habitData) as habit}
-      <div class="habit">
-        <h4>
-            {habit.title}
-          </h4>
-          <button on:click={() => editHabit(habit.id)}>✏️Edit</button>
-          <button on:click={() => deleteHabit(habit.id)}>❌Delete</button>
-        </div>
-        {/each}
-        <form on:submit|preventDefault={addHabit}>
-            <label>Title</label>
-            <input required bind:value={newHabitTitle}>
-            <button>Add New 30 Day Habit</button>
-          </form>
+      <div class="section-top">
+        <div class="section-title">Habits</div>
+        <button on:click="{addHabit}">Add New</button>
       </div>
-    </div>
-<div class="calendar">
-  <div class="day-row">
-    <div>SUN</div>
-    <div>MON</div>
-    <div>TUE</div>
-    <div>WED</div>
-    <div>THU</div>
-    <div>FRI</div>
-    <div>SAT</div>
-  </div>
-  <div class="day-grid">
-  {#each dayArray as day}
-  <div class="cell" class:other-month="{!isSameMonth(day.date, displayDate)}" class:today="{isSameDay(day.date,today)}">
-    <div class="cell-top-bar">
-      <span class="cell-date">{day.date.getDate()}</span>
-    </div> 
-    {#each day.habits as habit}
-      <button class="cell-habit" on:click="{() => cycleRecord(habit.recordId)}" class:success="{recordData[habit.recordId] === true}" class:failure="{recordData[habit.recordId] === false}">
-        {habit.title}
-      </button>
+      {#each Object.values(habitData) as habit}
+      <div class="habit" class:editMode="{habit.id === editModeId}">
+        <div class="fields">
+          <div>
+            <input
+              class="title"
+              disabled="{habit.id !== editModeId}"
+              bind:value="{habit.title}"
+              placeholder="Title"
+              autofocus
+            />
+          </div>
+        </div>
+        <div class="controls">
+          {#if habit.id === editModeId}
+          <button on:click="{() => {editModeId = ''}}">Done</button>
+          <button class="delete" on:click="{() => { deleteHabit(habit.id)}}">Delete</button>
+          {:else}
+          <button on:click="{() => {editModeId = habit.id}}">Edit</button>
+          {/if}
+        </div>
+      </div>
       {/each}
     </div>
-    {/each}
+  </div>
+  <div class="calendar">
+    <div class="day-row">
+      <div>SUN</div>
+      <div>MON</div>
+      <div>TUE</div>
+      <div>WED</div>
+      <div>THU</div>
+      <div>FRI</div>
+      <div>SAT</div>
+    </div>
+    <div class="day-grid">
+      {#each dayArray as day}
+      <div
+        class="cell"
+        class:other-month="{!isSameMonth(day.date, displayDate)}"
+        class:today="{isSameDay(day.date,today)}"
+      >
+        <div class="cell-top-bar">
+          <span class="cell-date">{day.date.getDate()}</span>
+        </div>
+        {#each day.habits as habit}
+        <button
+          class="cell-habit"
+          on:click="{() => cycleRecord(habit.recordId)}"
+          class:success="{recordData[habit.recordId] === true}"
+          class:failure="{recordData[habit.recordId] === false}"
+        >
+          {habit.title || '?'}
+        </button>
+        {/each}
+      </div>
+      {/each}
+    </div>
   </div>
 </div>
-</div>
-
-
-
-
-
-
 
 <style>
   .header {
@@ -245,20 +257,21 @@
     justify-content: space-between;
   }
 
-  .header-left, .header-right {
+  .header-left,
+  .header-right {
     display: flex;
     align-items: center;
   }
 
-  .logo{
+  .logo {
     width: 20px;
     margin-right: 5px;
   }
-  .logo-type{
+  .logo-type {
     font-size: 27px;
   }
 
-  .hamburger{
+  .hamburger {
     margin-right: 15px;
     font-size: 15px;
     width: 35px;
@@ -269,39 +282,92 @@
     margin-left: 6px;
   }
 
-  .desktop{
+  .desktop {
     display: none;
   }
-  @media (min-width: 600px){
+  @media (min-width: 600px) {
     .mobile {
-      display: none
+      display: none;
     }
-    .desktop{
+    .desktop {
       display: initial;
     }
   }
 
-  .body{
+  .body {
     display: flex;
     min-height: calc(100% - 50px);
   }
 
   .sidebar {
     width: 0px;
-    transition: .2s;
+    transition: 0.2s;
+    padding-right: 8px;
+    position: relative;
+    left: -220px;
+    opacity: 0;
   }
-  .sidebar.active{
+  .sidebar.active {
     width: 220px;
+    left: 0;
+    opacity: 1;
   }
   @media (min-width: 600px) {
     .sidebar {
       width: 220px;
+      left: 0;
     }
   }
 
-  .habit {
+  .section-top {
     display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ccc;
+  }
+  .section-top .section-title {
+    font-size: 16px;
+    font-variant: all-small-caps;
+  }
+  .section-top button {
+    font-size: 10px;
+  }
+
+  .habit {
     align-items: center;
+    transition: 0.2s;
+    padding: 3px;
+    margin: 3px;
+    border-radius: 3px;
+  }
+  .habit.editMode {
+    background-color: #eee;
+  }
+  .habit .fields {
+    display: block;
+    width: 100%;
+  }
+  .habit .fields input {
+    border: none;
+    width: 100%;
+  }
+  .habit .fields input:disabled {
+    color: black;
+  }
+  .habit .fields .title {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .habit .controls {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    font-size: 12px;
+  }
+  .habit .delete {
+    background: none;
+    border: none;
+    color: red;
+    text-decoration: underline;
   }
 
   .calendar {
@@ -309,7 +375,7 @@
     background: white;
   }
 
-  .day-row{
+  .day-row {
     display: flex;
     padding-bottom: 4px;
   }
@@ -322,6 +388,7 @@
 
   .day-grid {
     width: 100%;
+    height: 95%;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     grid-template-rows: repeat(6, 1fr);
@@ -332,7 +399,7 @@
     background: #f5f5f5;
     overflow: hidden;
   }
-  .cell-top-bar{
+  .cell-top-bar {
     display: flex;
     justify-content: center;
   }
@@ -342,19 +409,19 @@
     text-align: center;
     font-weight: normal;
   }
-  .cell-habit{
+  .cell-habit {
     display: block;
     width: 100%;
     padding: 3px;
     border-radius: 3px;
     margin-bottom: 2px;
     font-size: 14px;
-    transition: .2s;
+    transition: 0.2s;
     user-select: none;
     overflow: hidden;
     cursor: pointer;
     white-space: nowrap;
-  } 
+  }
   .cell-habit.success {
     background: #8bc34a;
     color: white;
@@ -364,14 +431,14 @@
     color: white;
   }
 
-  .today .cell-date{
+  .today .cell-date {
     color: white;
-    background-color: #2196F3;
+    background-color: #2196f3;
     border-radius: 100%;
   }
 
   .other-month {
     background: white;
-    color: #ccc
+    color: #ccc;
   }
 </style>
