@@ -119,10 +119,11 @@
     const startDate = startOfDay(new Date())
     habitData[id] = {
       id,
-      title: 'New Habit',
+      title: '',
       startDate,
       endDate: addDays(startDate, 30)
     }
+    //automatically start editing new habit
     editModeId = id
   }
 
@@ -159,10 +160,15 @@
 
   // UI Controls ----------------------------------------------------------------------------
   let sidebarActive = false
-  let editModeId = ''
+  let editModeId
+  let editTitle
 
   function toggleSidebar() {
     sidebarActive = !sidebarActive
+  }
+
+  function setEditModeId(id) {
+    editModeId = id
   }
 </script>
 
@@ -197,27 +203,32 @@
         transition:fade="{{duration: 200}}"
         animate:flip="{{duration: 200}}"
       >
-        <div class="fields">
-          <div>
+        <form on:submit|preventDefault="{() => {editModeId = ''}}">
+          <div class="fields">
+            <!-- this duplicate if block input is for autofocusing -->
+            {#if habit.id === editModeId}
+            <input class="title" bind:value="{habit.title}" placeholder="Title" autofocus />
+            {:else}
+            <input class="title" disabled value="{habit.title}" placeholder="Title" />
+            {/if}
             <input
-              class="title"
+              class="description"
               disabled="{habit.id !== editModeId}"
-              bind:value="{habit.title}"
-              placeholder="Title"
-              autofocus
+              bind:value="{habit.description}"
+              placeholder="Description"
             />
           </div>
-        </div>
-        <div class="controls">
-          {#if habit.id === editModeId}
-          <button on:click="{() => {editModeId = ''}}">Done</button>
-          <button class="delete" on:click="{() => { deleteHabit(habit.id)}}">Delete</button>
-          {:else}
-          <button on:click="{() => {editModeId = habit.id}}">
-            Edit
-          </button>
-          {/if}
-        </div>
+          <div class="controls">
+            {#if habit.id === editModeId}
+            <button type="submit" on:click="{() => {editModeId = ''}}">Done</button>
+            <button class="delete" on:click="{() => { deleteHabit(habit.id)}}">Delete</button>
+            {:else}
+            <button on:click="{() => {setEditModeId(habit.id)}}">
+              Edit
+            </button>
+            {/if}
+          </div>
+        </form>
       </div>
       {/each}
     </div>
@@ -358,15 +369,23 @@
   .habit .fields input {
     border: none;
     width: 100%;
+    margin-bottom: 3px;
+    padding: 3px;
   }
   .habit .fields input:disabled {
     color: black;
+    border-bottom: none;
   }
   .habit .fields .title {
     font-size: 18px;
     font-weight: bold;
   }
+  .habit .fields .description {
+    font-size: 10px;
+  }
   .habit .controls {
+    margin-top: 3px;
+    margin-bottom: 0;
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-between;
