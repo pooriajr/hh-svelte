@@ -166,12 +166,9 @@
   }
 
   function deleteHabit(id) {
-    if (window.confirm(`Delete this habit? -> ${habitData[id].title}`)) {
-      //trigger a rerender
-      habitData[id] = habitData[id]
-
-      delete habitData[id]
-    }
+    //trigger a rerender
+    habitData[id] = habitData[id]
+    delete habitData[id]
   }
 
   function cycleRecord(habitId, fDate) {
@@ -183,15 +180,11 @@
   // UI Controls ----------------------------------------------------------------------------
 
   let sidebarActive = false
-  let editModeId
-  let editTitle
+  let deleteConfirmId = ''
+  let editModeId = ''
 
   function toggleSidebar() {
     sidebarActive = !sidebarActive
-  }
-
-  function setEditModeId(id) {
-    editModeId = id
   }
 
   // Helper Functions ------------------------------------------------------------------------
@@ -256,14 +249,23 @@
           <div class="controls">
             {#if habit.id === editModeId}
             <button type="submit" on:click="{() => {editModeId = ''}}">Done</button>
-            <button class="delete" on:click="{() => { deleteHabit(habit.id)}}">Delete</button>
+            <button class="triggerDeleteOverlay" on:click="{() => {deleteConfirmId = habit.id }}">Delete</button>
             {:else}
-            <button on:click="{() => {setEditModeId(habit.id)}}">
+            <button on:click="{() => {editModeId = habit.id}}">
               Edit
             </button>
             {/if}
           </div>
         </form>
+        {#if habit.id === deleteConfirmId}
+        <div class="deleteConfirmOverlay" transition:fade="{{duration: 200}}">
+          <p>Sure? It's permanent.</p>
+          <div>
+            <button on:click="{() => deleteConfirmId = ''}">Cancel</button>
+            <button class="delete" on:click="{() => deleteHabit(habit.id)}">Delete</button>
+          </div>
+        </div>
+        {/if}
       </div>
       {/each}
     </div>
@@ -392,6 +394,7 @@
     padding: 3px;
     margin: 3px;
     border-radius: 3px;
+    position: relative;
   }
   .habit.editMode {
     background-color: #eee;
@@ -425,11 +428,32 @@
     justify-content: space-between;
     font-size: 12px;
   }
-  .habit .delete {
+  .habit .triggerDeleteOverlay {
     background: none;
     border: none;
-    color: red;
+    color: #f44336;
     text-decoration: underline;
+  }
+
+  .deleteConfirmOverlay {
+    border-radius: inherit;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    min-height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 3px;
+    text-align: center;
+    font-size: 12px;
+    color: white;
+  }
+  .deleteConfirmOverlay > div {
+    display: flex;
+    justify-content: space-around;
+  }
+  .deleteConfirmOverlay button.delete {
+    background: #f44336;
+    color: white;
   }
 
   .calendar {
@@ -481,7 +505,6 @@
     transition: 0.2s;
     user-select: none;
     overflow: hidden;
-    cursor: pointer;
     white-space: nowrap;
   }
   .cell-habit.success {
@@ -506,5 +529,9 @@
   .other-month {
     background: white;
     color: #ccc;
+  }
+
+  button {
+    cursor: pointer;
   }
 </style>
