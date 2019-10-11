@@ -313,13 +313,13 @@
   </div>
   <div class="calendar">
     <div class="day-row">
-      <div>SUN</div>
-      <div>MON</div>
-      <div>TUE</div>
-      <div>WED</div>
-      <div>THU</div>
-      <div>FRI</div>
-      <div>SAT</div>
+      <div>S</div>
+      <div>M</div>
+      <div>T</div>
+      <div>W</div>
+      <div>T</div>
+      <div>F</div>
+      <div>S</div>
     </div>
     <div class="day-grid">
       {#each dayArray as day}
@@ -600,7 +600,7 @@
     width: 100%;
     padding: 3px;
     margin-bottom: 2px;
-    font-size: 14px;
+    font-size: 12px;
     transition: 0.2s;
     user-select: none;
     overflow: hidden;
