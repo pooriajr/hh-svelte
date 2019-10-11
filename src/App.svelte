@@ -30,6 +30,7 @@
   let displayDate = today
 
   function generateDayArray(startDate, habitData) {
+    console.time('generateDayArray')
     let dateArray
     // 1. get first and last days of the display range,
     // * based on the first day of the first week of the month of the displayDate.
@@ -66,6 +67,7 @@
       return Object.assign(day, { habits: habitsForThisDay })
     })
 
+    console.timeEnd('generateDayArray')
     return dayArray
   }
 
@@ -143,7 +145,6 @@
   if (window.localStorage.getItem('habitData')) {
     habitData = JSON.parse(window.localStorage.getItem('habitData'))
     Object.keys(habitData).forEach(key => {
-      console.log(key)
       habitData[key].startDate = new Date(habitData[key].startDate)
       habitData[key].endDate = new Date(habitData[key].endDate)
     })
@@ -216,6 +217,7 @@
   let deleteConfirmId = ''
   let editModeId = ''
   let progressBarColor = '#2196f3'
+  let activeCell = ''
 
   function toggleSidebar() {
     sidebarActive = !sidebarActive
@@ -321,26 +323,32 @@
     </div>
     <div class="day-grid">
       {#each dayArray as day}
-      <div
+      <button
         class="cell"
         class:other-month="{!isSameMonth(day.date, displayDate)}"
         class:today="{isSameDay(day.date,today)}"
+        on:click="{() => {activeCell = day.date}}"
+        class:active="{day.date === activeCell}"
+        disabled="{isAfter(day.date,today)}"
       >
         <div class="cell-top-bar">
           <span class="cell-date">{day.date.getDate()}</span>
         </div>
-        {#each day.habits.reverse() as habit (habit.id)}
+        {#each day.habits as habit (habit.id)}
         <button
           class="cell-habit"
           on:click="{() => cycleRecord(habit.id, day.fDate)}"
-          disabled="{isAfter(day.date,today)}"
+          disabled="{day.date !== activeCell}"
           class:success="{habit.records[day.fDate] === true}"
           class:failure="{habit.records[day.fDate] === false}"
+          class:active="{day.date === activeCell}"
         >
           {habit.title || '?'}
         </button>
-        {/each}
-      </div>
+        {/each} {#if day.date === activeCell}
+        <button class="cell-done" on:click|stopPropagation="{() => {activeCell = ''}}">Done</button>
+        {/if}
+      </button>
       {/each}
     </div>
   </div>
@@ -394,7 +402,7 @@
 
   .body {
     display: flex;
-    min-height: calc(100% - 50px);
+    height: calc(100vh - 60px);
   }
 
   .sidebar {
@@ -403,6 +411,7 @@
     padding-right: 8px;
     position: relative;
     left: -220px;
+    overflow-y: auto;
   }
   .sidebar.active {
     width: 220px;
@@ -541,6 +550,20 @@
   .cell {
     background: #f5f5f5;
     overflow: hidden;
+    transition: 0.2s;
+  }
+  .cell.active {
+    border: 1px solid #2196f3;
+    z-index: 2;
+    border-radius: 3px;
+    padding: 5px;
+    height: fit-content;
+    min-height: 100%;
+    transform: scale(1.1);
+  }
+  .cell-done {
+    width: 100%;
+    margin-bottom: 0;
   }
   .cell-top-bar {
     display: flex;
@@ -563,6 +586,10 @@
     user-select: none;
     overflow: hidden;
     white-space: nowrap;
+  }
+  .cell-habit.active {
+    margin-bottom: 4px;
+    height: 30px;
   }
   .cell-habit.success {
     background: #8bc34a;
