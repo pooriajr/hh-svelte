@@ -642,6 +642,16 @@
     background: white;
     color: #ccc;
   }
+  .other-month:nth-child(n + 1):nth-child(-n + 6) {
+    margin: -1px 0 0 -1px;
+  }
+  .other-month:nth-child(n + 29):nth-child(-n + 42) {
+    margin-right: -1px;
+    margin-bottom: -1px;
+  }
+  .other-month:nth-child(36) {
+    margin-left: -1px;
+  }
 
   button {
     cursor: pointer;
