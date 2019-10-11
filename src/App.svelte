@@ -330,22 +330,31 @@
         on:click="{() => {activeCell = day.date}}"
         class:active="{day.date === activeCell}"
         disabled="{isAfter(day.date,today)}"
+        autofocus="{isSameDay(day.date,today)}"
       >
         <div class="cell-top-bar">
           <span class="cell-date">{day.date.getDate()}</span>
         </div>
-        {#each day.habits as habit (habit.id)}
+        {#each day.habits as habit (habit.id)} {#if day.date === activeCell}
         <button
-          class="cell-habit"
+          class="cell-habit active"
           on:click="{() => cycleRecord(habit.id, day.fDate)}"
           disabled="{day.date !== activeCell}"
+          class:success="{habit.records[day.fDate] === true}"
+          class:failure="{habit.records[day.fDate] === false}"
+        >
+          {habit.title || '?'}
+        </button>
+        {:else}
+        <div
+          class="cell-habit"
           class:success="{habit.records[day.fDate] === true}"
           class:failure="{habit.records[day.fDate] === false}"
           class:active="{day.date === activeCell}"
         >
           {habit.title || '?'}
-        </button>
-        {/each} {#if day.date === activeCell}
+        </div>
+        {/if} {/each} {#if day.date === activeCell}
         <button class="cell-done" on:click|stopPropagation="{() => {activeCell = ''}}">Done</button>
         {/if}
       </button>
@@ -545,20 +554,31 @@
     grid-template-columns: repeat(7, 1fr);
     grid-template-rows: repeat(6, 1fr);
     grid-gap: 1px;
+    background: #d4d4d4;
+    border: 1px solid #d4d4d4;
   }
 
   .cell {
     background: #f5f5f5;
     overflow: hidden;
-    transition: 0.2s;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+  }
+  .cell:focus {
+    border: 1px solid #2196f3;
+    margin: -1px;
   }
   .cell.active {
     border: 1px solid #2196f3;
+    margin: 0px;
     z-index: 2;
     border-radius: 3px;
     padding: 5px;
     height: fit-content;
     min-height: 100%;
+    min-width: 80px;
     transform: scale(1.1);
   }
   .cell-done {
@@ -579,25 +599,26 @@
     display: block;
     width: 100%;
     padding: 3px;
-    border-radius: 3px;
     margin-bottom: 2px;
     font-size: 14px;
     transition: 0.2s;
     user-select: none;
     overflow: hidden;
     white-space: nowrap;
+    margin-bottom: 0px;
+    color: rgb(0, 0, 0, 0.6);
   }
   .cell-habit.active {
+    border-radius: 3px;
     margin-bottom: 4px;
     height: 30px;
+    font-size: 12px;
   }
   .cell-habit.success {
-    background: #8bc34a;
-    color: white;
+    background: #aed581;
   }
   .cell-habit.failure {
-    background: #f44336;
-    color: white;
+    background: #e57373;
   }
   .cell-habit:disabled {
     border: none;
@@ -624,5 +645,8 @@
 
   button {
     cursor: pointer;
+  }
+  button:disabled {
+    cursor: default;
   }
 </style>
