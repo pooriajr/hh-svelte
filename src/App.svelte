@@ -559,7 +559,7 @@
   }
 
   .cell {
-    background: #f5f5f5;
+    background: #fff;
     overflow: hidden;
     padding: 0;
     margin: 0;
@@ -651,6 +651,10 @@
   }
   .other-month:nth-child(36) {
     margin-left: -1px;
+  }
+  .other-month.today .cell-date {
+    color: #ccc;
+    background: none;
   }
 
   button {
