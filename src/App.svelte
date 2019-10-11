@@ -138,31 +138,41 @@
   $: calcHabitScore(habitData)
 
   //HABIT CRUD ----------------------------------------------------------------------------
+  let habitData
 
-  let habitData = {
-    123: {
-      id: 123,
-      title: 'The Plan',
-      startDate: new Date(2019, 9, 1),
-      endDate: new Date(2019, 9, 11),
-      importance: 1,
-      records: {
-        '2019-10-01': true,
-        '2019-10-02': false,
-        '2019-10-03': true
-      }
-    },
-    234: {
-      id: 234,
-      title: 'Meditation',
-      startDate: new Date(2019, 9, 2),
-      endDate: new Date(2019, 10, 1),
-      importance: 1,
-      records: {
-        '2019-10-02': true,
-        '2019-10-03': true,
-        '2019-10-09': false,
-        '2019-10-10': true
+  if (window.localStorage.getItem('habitData')) {
+    habitData = JSON.parse(window.localStorage.getItem('habitData'))
+    Object.keys(habitData).forEach(key => {
+      console.log(key)
+      habitData[key].startDate = new Date(habitData[key].startDate)
+      habitData[key].endDate = new Date(habitData[key].endDate)
+    })
+  } else {
+    habitData = {
+      123: {
+        id: 123,
+        title: 'The Plan',
+        startDate: new Date(2019, 9, 1),
+        endDate: new Date(2019, 9, 11),
+        importance: 1,
+        records: {
+          '2019-10-01': true,
+          '2019-10-02': false,
+          '2019-10-03': true
+        }
+      },
+      234: {
+        id: 234,
+        title: 'Meditation',
+        startDate: new Date(2019, 9, 2),
+        endDate: new Date(2019, 10, 1),
+        importance: 1,
+        records: {
+          '2019-10-02': true,
+          '2019-10-03': true,
+          '2019-10-09': false,
+          '2019-10-10': true
+        }
       }
     }
   }
@@ -193,6 +203,12 @@
     else if (habitData[habitId].records[fDate] === true) habitData[habitId].records[fDate] = false
     else if (habitData[habitId].records[fDate] === false) habitData[habitId].records[fDate] = undefined
   }
+
+  function saveHabitData(habitData) {
+    window.localStorage.setItem('habitData', JSON.stringify(habitData))
+  }
+
+  $: saveHabitData(habitData)
 
   // UI Controls ----------------------------------------------------------------------------
 
