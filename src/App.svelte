@@ -14,7 +14,8 @@
     areIntervalsOverlapping,
     isWithinInterval,
     startOfDay,
-    lightFormat
+    lightFormat,
+    isAfter
   } from 'date-fns'
 
   let uuid = function b(a) {
@@ -25,7 +26,7 @@
 
   // CALENDAR ----------------------------------------------------------------------------
 
-  let today = new Date()
+  let today = startOfDay(new Date())
   let displayDate = today
 
   function generateDayArray(startDate, habitData) {
@@ -316,6 +317,7 @@
         <button
           class="cell-habit"
           on:click="{() => cycleRecord(habit.id, day.fDate)}"
+          disabled="{isAfter(day.date,today)}"
           class:success="{habit.records[day.fDate] === true}"
           class:failure="{habit.records[day.fDate] === false}"
         >
@@ -553,6 +555,13 @@
   .cell-habit.failure {
     background: #f44336;
     color: white;
+  }
+  .cell-habit:disabled {
+    border: none;
+    background: none;
+    color: #aaa;
+    cursor: auto;
+    font-style: italic;
   }
 
   .today .cell-date {
