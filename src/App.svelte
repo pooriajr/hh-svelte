@@ -232,7 +232,7 @@
 <div class="header">
   <div class="header-left">
     <button class="mobile hamburger" on:click="{toggleSidebar}">{ sidebarActive ? '✕' : '☰' }</button>
-    <img class="logo" src="habit-helper-logo.svg" />
+    <img class="logo" alt="logo" src="habit-helper-logo.svg" />
     <h3 class="logo-type desktop">Habit Helper</h3>
     <h3 class="logo-type mobile">HH</h3>
   </div>
@@ -257,7 +257,7 @@
       <div
         class="rank-progress-bar"
         id="progress-bar"
-        style="{`width: ${rankProgress}%; background: ${progressBarColor}`}"
+        style="width: {rankProgress}%; background: {progressBarColor};"
       ></div>
     </div>
     <div class="section habits">
@@ -274,8 +274,8 @@
       >
         <form on:submit|preventDefault="{() => {editModeId = ''}}">
           <div class="fields">
-            <!-- this duplicate if block input is for autofocusing -->
             {#if habit.id === editModeId}
+            <!-- svelte-ignore a11y-autofocus -->
             <input class="title" bind:value="{habit.title}" placeholder="Title" autofocus />
             {:else}
             <input class="title" disabled value="{habit.title}" placeholder="Title" />
@@ -321,6 +321,7 @@
     </div>
     <div class="day-grid">
       {#each dayArray as day}
+      <!-- svelte-ignore a11y-autofocus -->
       <button
         class="cell"
         class:other-month="{!isSameMonth(day.date, displayDate)}"
