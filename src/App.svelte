@@ -98,12 +98,9 @@
 
   //HABIT SCORE ----------------------------------------------------------------------------
 
-  let habitScore, maxPoints, earnedPoints, rankProgress, currentRank
-
   function calcHabitScore(habitData) {
-    maxPoints = 0
-    earnedPoints = 0
-    prevHabitScore = habitScore
+    let maxPoints = 0
+    let earnedPoints = 0
 
     //1. Iterate over every Habit
     Object.values(habitData).forEach(habit => {
@@ -119,13 +116,26 @@
     })
 
     //6. Calculate the score as the percentage earned from the max possible points
-    habitScore = Math.floor(100 * (earnedPoints / maxPoints))
-    rankProgress = ((habitScore % 10) / 10) * 100
-    currentRank = Math.floor(habitScore * 0.1) + 1
+    return Math.floor(100 * (earnedPoints / maxPoints)) || 0
   }
 
-  $: calcHabitScore(habitData)
+  $: habitScore = calcHabitScore(habitData)
 
+  // RANK ------------------------------------------------------------------------------------
+  let currentRank, rankProgress
+
+  let ranks = [
+    { title: 'Newbie', min: 0, max: 9, color: '#000', img: '0.svg' },
+    { title: 'Greenhorn', min: 10, max: 29, color: '#3CB54A', img: '1.1.svg' },
+    { title: 'Tough Guy', min: 30, max: 49, color: '#BD6428', img: '2.1.svg' },
+    { title: 'Smooth Sailor', min: 50, max: 69, color: '#3CB54A', img: '3.1.svg' },
+    { title: 'Hardcore Habiteer', min: 70, max: 84, color: '#3689C9', img: '4.1.svg' },
+    { title: 'Shining Star', min: 85, max: 94, color: '#FFCB5B', img: '5.1.svg' },
+    { title: 'Master', min: 95, max: 100, color: '#000', img: '6.svg' }
+  ]
+
+  $: currentRank = ranks.find(rank => habitScore >= rank.min && habitScore <= rank.max) || {}
+  $: rankProgress = (habitScore - currentRank.min / currentRank.max - currentRank.min) * 10
   //HABIT CRUD ----------------------------------------------------------------------------
   let habitData
 
@@ -206,16 +216,6 @@
   let progressBarColor = '#2196f3'
   let activeCell = ''
 
-  let ranks = [
-    { title: 'Newbie', min: 0, color: '#000', img: '0.svg' },
-    { title: 'Greenhorn', min: 10, color: '#3CB54A', img: '1.1.svg' },
-    { title: 'Tough Guy', min: 30, color: '#BD6428', img: '2.1.svg' },
-    { title: 'Smooth Sailor', min: 50, color: '#3CB54A', img: '3.1.svg' },
-    { title: 'Hardcore Habiteer', min: 70, color: '#3689C9', img: '4.1.svg' },
-    { title: 'Shining Star', min: 85, color: '#FFCB5B', img: '5.1.svg' },
-    { title: 'Master', min: 95, color: '#000', img: '6.svg' }
-  ]
-
   function toggleSidebar() {
     sidebarActive = !sidebarActive
   }
@@ -250,11 +250,13 @@
         <div class="section-title">Habit Rank</div>
         <button>?</button>
       </div>
-      <div class="current-rank">Rank {currentRank}</div>
+      <p>{habitScore}</p>
+      <input type="range" bind:value="{habitScore}" min="0" max="100" />
+      <div class="current-rank" style="color:{currentRank.color};">{currentRank.title}</div>
       <div
         class="rank-progress-bar"
         id="progress-bar"
-        style="width: {rankProgress}%; background: {progressBarColor};"
+        style="width: {rankProgress}%; background: {currentRank.color};"
       ></div>
       <div class="rank-badges">
         {#each new Array(currentRank) as name, index}

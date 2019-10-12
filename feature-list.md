@@ -9,11 +9,11 @@
 - [ ] old habits are hidden under a "show/hide" toggle
 - [ ] flesh out the ranking/score system. look for examples of existing ranking system in video games
 - [ ] range of habit score is only 90 days
+- [ ] add random habit generator
 
 ## Future
 - [ ] defer habit score updates until after a day is out of edit mode
 - [ ] year view
-- [ ] add random habit generator
 - [ ] set habit penalty
 - [ ] set habit icon
 - [ ] add database and auth for registered users
