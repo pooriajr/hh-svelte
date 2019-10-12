@@ -332,31 +332,34 @@
         disabled="{isAfter(day.date,today)}"
         autofocus="{isSameDay(day.date,today)}"
       >
-        <div class="cell-top-bar">
-          <span class="cell-date">{day.date.getDate()}</span>
+        <div class="cell-wrapper">
+          <div class="cell-top-bar">
+            <span class="cell-date">{day.date.getDate()}</span>
+            {#if day.date === activeCell}
+            <button class="cell-close" on:click|stopPropagation="{() => {activeCell = ''}}">✕</button>
+            {/if}
+          </div>
+          {#each day.habits as habit (habit.id)} {#if day.date === activeCell}
+          <button
+            class="cell-habit active"
+            on:click="{() => cycleRecord(habit.id, day.fDate)}"
+            disabled="{day.date !== activeCell}"
+            class:success="{habit.records[day.fDate] === true}"
+            class:failure="{habit.records[day.fDate] === false}"
+          >
+            {habit.title || '?'}
+          </button>
+          {:else}
+          <div
+            class="cell-habit"
+            class:success="{habit.records[day.fDate] === true}"
+            class:failure="{habit.records[day.fDate] === false}"
+            class:active="{day.date === activeCell}"
+          >
+            {habit.title || '?'}
+          </div>
+          {/if} {/each}
         </div>
-        {#each day.habits as habit (habit.id)} {#if day.date === activeCell}
-        <button
-          class="cell-habit active"
-          on:click="{() => cycleRecord(habit.id, day.fDate)}"
-          disabled="{day.date !== activeCell}"
-          class:success="{habit.records[day.fDate] === true}"
-          class:failure="{habit.records[day.fDate] === false}"
-        >
-          {habit.title || '?'}
-        </button>
-        {:else}
-        <div
-          class="cell-habit"
-          class:success="{habit.records[day.fDate] === true}"
-          class:failure="{habit.records[day.fDate] === false}"
-          class:active="{day.date === activeCell}"
-        >
-          {habit.title || '?'}
-        </div>
-        {/if} {/each} {#if day.date === activeCell}
-        <button class="cell-done" on:click|stopPropagation="{() => {activeCell = ''}}">Done</button>
-        {/if}
       </button>
       {/each}
     </div>
@@ -565,6 +568,7 @@
     margin: 0;
     border: 0;
     border-radius: 0;
+    position: relative;
   }
   .cell:focus {
     border: 1px solid #2196f3;
@@ -575,25 +579,59 @@
     margin: 0px;
     z-index: 2;
     border-radius: 3px;
-    padding: 5px;
     height: fit-content;
     min-height: 100%;
     min-width: 80px;
     transform: scale(1.1);
   }
-  .cell-done {
+  .cell-wrapper {
     width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top: 0;
+    left: 0;
+  }
+  .cell.active .cell-wrapper {
+    padding: 5px;
+    padding-top: 40px;
+    position: initial;
+  }
+  .cell-close {
     margin-bottom: 0;
+    border: none;
+    background: none;
+  }
+  .cell.active.today .cell-close {
+    color: white;
   }
   .cell-top-bar {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+  }
+  .cell.active .cell-top-bar {
+    height: 35px;
+  }
+  .cell.active.today .cell-top-bar {
+    background: #2196f3;
+    color: white;
   }
   .cell-date {
     font-size: 11px;
-    padding: 3px 4px;
-    text-align: center;
+    padding: 1px 4px 3px 4px;
+    text-align: left;
     font-weight: normal;
+    border-radius: 0 0 5px 0;
+    color: rgba(0, 0, 0, 0.45);
+  }
+  .cell.active .cell-date {
+    background: white;
   }
   .cell-habit {
     display: block;
@@ -607,6 +645,7 @@
     white-space: nowrap;
     margin-bottom: 0px;
     color: rgb(0, 0, 0, 0.6);
+    flex-grow: 1;
   }
   .cell-habit.active {
     border-radius: 3px;
@@ -628,14 +667,9 @@
     font-style: italic;
   }
 
-  .today .cell-date {
+  .cell.today .cell-date {
     color: white;
     background-color: #2196f3;
-    width: 18px;
-    height: 18px;
-    margin-bottom: 1px;
-    border-radius: 100%;
-    line-height: 1;
   }
 
   .other-month {
