@@ -98,30 +98,30 @@
 
   //HABIT SCORE ----------------------------------------------------------------------------
 
-  let habitScore = 100
+  let habitScore
 
-  // function calcHabitScore(habitData) {
-  //   let maxPoints = 0
-  //   let earnedPoints = 0
+  function calcHabitScore(habitData) {
+    let maxPoints = 0
+    let earnedPoints = 0
 
-  //   //1. Iterate over every Habit
-  //   Object.values(habitData).forEach(habit => {
-  //     //2. For every day in its duration, add its importance to the maxPoints
-  //     maxPoints += getHabitDuration(habit) * habit.importance
-  //     //3. Iterate over the records for this habit
-  //     Object.values(habit.records).forEach(record => {
-  //       //4. For every successful record, add the habit's importance to earnedPoints
-  //       if (record === true) earnedPoints += habit.importance
-  //       //5. For every failure record, subtract the habit's importance from earnedPoints + a penalty that scales cubicly with importance
-  //       else if (record === false) earnedPoints -= habit.importance * habit.importance
-  //     })
-  //   })
+    //1. Iterate over every Habit
+    Object.values(habitData).forEach(habit => {
+      //2. For every day in its duration, add its importance to the maxPoints
+      maxPoints += getHabitDuration(habit) * habit.importance
+      //3. Iterate over the records for this habit
+      Object.values(habit.records).forEach(record => {
+        //4. For every successful record, add the habit's importance to earnedPoints
+        if (record === true) earnedPoints += habit.importance
+        //5. For every failure record, subtract the habit's importance from earnedPoints + a penalty that scales cubicly with importance
+        else if (record === false) earnedPoints -= habit.importance * habit.importance
+      })
+    })
 
-  //   //6. Calculate the score as the percentage earned from the max possible points
-  //   return Math.floor(100 * (earnedPoints / maxPoints)) || 0
-  // }
+    //6. Calculate the score as the percentage earned from the max possible points
+    habitScore = Math.floor(100 * (earnedPoints / maxPoints)) || 0
+  }
 
-  // $: habitScore = calcHabitScore(habitData)
+  $: calcHabitScore(habitData)
 
   // RANK ------------------------------------------------------------------------------------
 
@@ -258,13 +258,53 @@
         <button>?</button>
       </div>
       <p>{habitScore}</p>
-      <input type="range" bind:value="{habitScore}" min="0" max="100" />
-      <div class="current-rank" style="color:{currentRank.color};">{currentRank.title}</div>
+      <input type="number" bind:value="{habitScore}" />
+      <div class="rank-swapper">
+        {#if currentRank.num === 0}
+        <div in:fly="{{ x: 30, delay: 250, duration:500 }}" out:fly="{{ x: -30, duration:250 }}">
+          <div class="current-rank" style="color:{currentRank.color};">
+            {currentRank.title}
+          </div>
+          <div
+            class="rank-progress-bar"
+            id="progress-bar"
+            style="width: {rankProgress}%; background: {currentRank.color};"
+          ></div>
+        </div>
+        {:else if currentRank.num === 1}
+        <div in:fly="{{ x: 30, delay: 250, duration:500 }}" out:fly="{{ x: -30, duration:250 }}">
+          <div class="current-rank" style="color:{currentRank.color};">
+            {currentRank.title}
+          </div>
+          <div
+            class="rank-progress-bar"
+            id="progress-bar"
+            style="width: {rankProgress}%; background: {currentRank.color};"
+          ></div>
+        </div>
+        {:else if currentRank.num === 2}
+        <div class="current-rank" style="color:{currentRank.color};">{currentRank.title}</div>
+        <div
+          class="rank-progress-bar"
+          id="progress-bar"
+          style="width: {rankProgress}%; background: {currentRank.color};"
+        ></div>
+        {:else}
+        <div class="current-rank" style="color:{currentRank.color};">{currentRank.title}</div>
+        <div
+          class="rank-progress-bar"
+          id="progress-bar"
+          style="width: {rankProgress}%; background: {currentRank.color};"
+        ></div>
+        {/if}
+      </div>
+
+      <!-- <div class="current-rank" style="color:{currentRank.color};">{currentRank.title}</div>
       <div
         class="rank-progress-bar"
         id="progress-bar"
         style="width: {rankProgress}%; background: {currentRank.color};"
-      ></div>
+      ></div> -->
       <div class="rank-badges">
         {#each myBadges as badge}
         <img src="badges/{badge}" in:fly="{{ x: 30, duration:1000 }}" out:fly="{{ y: -30, duration:1000 }}" />
@@ -453,6 +493,9 @@
     font-weight: bold;
     margin-bottom: 2px;
     color: #2196f3;
+  }
+  .rank-swapper {
+    height: 25px;
   }
   .rank-progress-bar {
     height: 5px;
