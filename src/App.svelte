@@ -1,5 +1,5 @@
 <script>
-  import { fade } from 'svelte/transition'
+  import { fade, fly } from 'svelte/transition'
   import { flip } from 'svelte/animate'
 
   import {
@@ -98,7 +98,7 @@
 
   //HABIT SCORE ----------------------------------------------------------------------------
 
-  let habitScore, maxPoints, earnedPoints, rankProgress, currentRank, prevHabitScore
+  let habitScore, maxPoints, earnedPoints, rankProgress, currentRank
 
   function calcHabitScore(habitData) {
     maxPoints = 0
@@ -122,19 +122,6 @@
     habitScore = Math.floor(100 * (earnedPoints / maxPoints))
     rankProgress = ((habitScore % 10) / 10) * 100
     currentRank = Math.floor(habitScore * 0.1) + 1
-
-    //7. Apply color to progress bar based on whether score went up or down
-    if (habitScore > prevHabitScore) {
-      progressBarColor = '#8BC34A'
-      window.setTimeout(() => {
-        progressBarColor = '#2196f3;'
-      }, 400)
-    } else if (habitScore < prevHabitScore) {
-      progressBarColor = '#f44336'
-      window.setTimeout(() => {
-        progressBarColor = '#2196f3;'
-      }, 400)
-    }
   }
 
   $: calcHabitScore(habitData)
@@ -211,13 +198,23 @@
 
   $: saveHabitData(habitData)
 
-  // UI Controls ----------------------------------------------------------------------------
+  // UI Stuff ---------------------------------------------------------------------------------
 
   let sidebarActive = false
   let deleteConfirmId = ''
   let editModeId = ''
   let progressBarColor = '#2196f3'
   let activeCell = ''
+
+  let ranks = [
+    { title: 'Newbie', min: 0, color: '#000', img: '0.svg' },
+    { title: 'Greenhorn', min: 10, color: '#3CB54A', img: '1.1.svg' },
+    { title: 'Tough Guy', min: 30, color: '#BD6428', img: '2.1.svg' },
+    { title: 'Smooth Sailor', min: 50, color: '#3CB54A', img: '3.1.svg' },
+    { title: 'Hardcore Habiteer', min: 70, color: '#3689C9', img: '4.1.svg' },
+    { title: 'Shining Star', min: 85, color: '#FFCB5B', img: '5.1.svg' },
+    { title: 'Master', min: 95, color: '#000', img: '6.svg' }
+  ]
 
   function toggleSidebar() {
     sidebarActive = !sidebarActive
@@ -259,6 +256,15 @@
         id="progress-bar"
         style="width: {rankProgress}%; background: {progressBarColor};"
       ></div>
+      <div class="rank-badges">
+        {#each new Array(currentRank) as name, index}
+        <img
+          src="badges/chevron-{index}.svg"
+          in:fly="{{ x: 30, duration:1000 }}"
+          out:fly="{{ y: -30, duration:1000 }}"
+        />
+        {/each}
+      </div>
     </div>
     <div class="section habits">
       <div class="section-top">
@@ -448,6 +454,23 @@
     border-radius: 5px 0px 0px 5px;
     min-width: 2px;
     transition: 0.8s;
+  }
+  .rank-badges {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    height: 35px;
+  }
+  .rank-badges img {
+    width: 30px;
+    margin-right: -20px;
+    transition: 1s;
+  }
+  .rank-badges img:first-child {
+    margin-left: -3px;
+  }
+  .rank-badges img:last-child {
+    width: 35px;
   }
 
   .section {
