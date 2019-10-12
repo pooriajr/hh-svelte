@@ -320,11 +320,9 @@
             {#if habit.id === editModeId}
             <!-- svelte-ignore a11y-autofocus -->
             <input class="title" bind:value="{habit.title}" placeholder="Title" autofocus />
-            {:else}
-            <input class="title" disabled value="{habit.title}" placeholder="Title" />
-            {/if} {#if habit.id === editModeId}
             <div contenteditable="true" class="notes" bind:innerHTML="{habit.notes}" placeholder="Notes"></div>
             {:else}
+            <input class="title" disabled value="{habit.title}" placeholder="Title" />
             <div contenteditable="false" class="notes" bind:innerHTML="{habit.notes}" placeholder="Notes"></div>
             {/if}
           </div>

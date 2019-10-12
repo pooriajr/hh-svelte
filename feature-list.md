@@ -5,7 +5,6 @@
 - [ ] add email optin
 - [x] create read-only cells which show habits nicely and don't care about clickability
 - [x] clicking a cell expands it into edit mode and allows editing records. 
-- [ ] set habit size
 - [ ] old habits are hidden under a "show/hide" toggle
 - [x] flesh out the ranking/score system. look for examples of existing ranking system in video games
 - [ ] range of habit score is only 90 days
@@ -13,6 +12,8 @@
 
 ## Future
 - [ ] defer habit score updates until after a day is out of edit mode
+- [ ] add a separate visual control panel for "cosmetic effects"
+- [ ] set habit size
 - [ ] year view
 - [ ] set habit penalty
 - [ ] set habit icon
