@@ -356,7 +356,9 @@
             class:failure="{habit.records[day.fDate] === false}"
             class:active="{day.date === activeCell}"
           >
-            {habit.title || '?'}
+            <span>
+              {habit.title || '?'}
+            </span>
           </div>
           {/if} {/each}
         </div>
@@ -634,17 +636,19 @@
     background: white;
   }
   .cell-habit {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     padding: 3px;
     margin-bottom: 2px;
-    font-size: 12px;
+    font-size: 10px;
     transition: 0.2s;
     user-select: none;
     overflow: hidden;
     white-space: nowrap;
     margin-bottom: 0px;
-    color: rgb(0, 0, 0, 0.6);
+    color: rgb(0, 0, 0, 0.5);
     flex-grow: 1;
   }
   .cell-habit.active {
@@ -652,6 +656,7 @@
     margin-bottom: 4px;
     height: 30px;
     font-size: 12px;
+    color: rgb(0, 0, 0, 0.7);
   }
   .cell-habit.success {
     background: #aed581;
