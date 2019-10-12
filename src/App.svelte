@@ -259,52 +259,12 @@
       </div>
       <p>{habitScore}</p>
       <input type="number" bind:value="{habitScore}" />
-      <div class="rank-swapper">
-        {#if currentRank.num === 0}
-        <div in:fly="{{ x: 30, delay: 250, duration:500 }}" out:fly="{{ x: -30, duration:250 }}">
-          <div class="current-rank" style="color:{currentRank.color};">
-            {currentRank.title}
-          </div>
-          <div
-            class="rank-progress-bar"
-            id="progress-bar"
-            style="width: {rankProgress}%; background: {currentRank.color};"
-          ></div>
-        </div>
-        {:else if currentRank.num === 1}
-        <div in:fly="{{ x: 30, delay: 250, duration:500 }}" out:fly="{{ x: -30, duration:250 }}">
-          <div class="current-rank" style="color:{currentRank.color};">
-            {currentRank.title}
-          </div>
-          <div
-            class="rank-progress-bar"
-            id="progress-bar"
-            style="width: {rankProgress}%; background: {currentRank.color};"
-          ></div>
-        </div>
-        {:else if currentRank.num === 2}
-        <div class="current-rank" style="color:{currentRank.color};">{currentRank.title}</div>
-        <div
-          class="rank-progress-bar"
-          id="progress-bar"
-          style="width: {rankProgress}%; background: {currentRank.color};"
-        ></div>
-        {:else}
-        <div class="current-rank" style="color:{currentRank.color};">{currentRank.title}</div>
-        <div
-          class="rank-progress-bar"
-          id="progress-bar"
-          style="width: {rankProgress}%; background: {currentRank.color};"
-        ></div>
-        {/if}
-      </div>
-
-      <!-- <div class="current-rank" style="color:{currentRank.color};">{currentRank.title}</div>
+      <div class="current-rank" style="color:{currentRank.color};">{currentRank.title}</div>
       <div
         class="rank-progress-bar"
         id="progress-bar"
         style="width: {rankProgress}%; background: {currentRank.color};"
-      ></div> -->
+      ></div>
       <div class="rank-badges">
         {#each myBadges as badge}
         <img src="badges/{badge}" in:fly="{{ x: 30, duration:1000 }}" out:fly="{{ y: -30, duration:1000 }}" />
@@ -492,7 +452,7 @@
     font-size: 16px;
     font-weight: bold;
     margin-bottom: 2px;
-    color: #2196f3;
+    transition: 0.5s;
   }
   .rank-swapper {
     height: 25px;
