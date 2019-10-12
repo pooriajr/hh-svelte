@@ -98,44 +98,51 @@
 
   //HABIT SCORE ----------------------------------------------------------------------------
 
-  function calcHabitScore(habitData) {
-    let maxPoints = 0
-    let earnedPoints = 0
+  let habitScore = 100
 
-    //1. Iterate over every Habit
-    Object.values(habitData).forEach(habit => {
-      //2. For every day in its duration, add its importance to the maxPoints
-      maxPoints += getHabitDuration(habit) * habit.importance
-      //3. Iterate over the records for this habit
-      Object.values(habit.records).forEach(record => {
-        //4. For every successful record, add the habit's importance to earnedPoints
-        if (record === true) earnedPoints += habit.importance
-        //5. For every failure record, subtract the habit's importance from earnedPoints + a penalty that scales cubicly with importance
-        else if (record === false) earnedPoints -= habit.importance * habit.importance
-      })
-    })
+  // function calcHabitScore(habitData) {
+  //   let maxPoints = 0
+  //   let earnedPoints = 0
 
-    //6. Calculate the score as the percentage earned from the max possible points
-    return Math.floor(100 * (earnedPoints / maxPoints)) || 0
-  }
+  //   //1. Iterate over every Habit
+  //   Object.values(habitData).forEach(habit => {
+  //     //2. For every day in its duration, add its importance to the maxPoints
+  //     maxPoints += getHabitDuration(habit) * habit.importance
+  //     //3. Iterate over the records for this habit
+  //     Object.values(habit.records).forEach(record => {
+  //       //4. For every successful record, add the habit's importance to earnedPoints
+  //       if (record === true) earnedPoints += habit.importance
+  //       //5. For every failure record, subtract the habit's importance from earnedPoints + a penalty that scales cubicly with importance
+  //       else if (record === false) earnedPoints -= habit.importance * habit.importance
+  //     })
+  //   })
 
-  $: habitScore = calcHabitScore(habitData)
+  //   //6. Calculate the score as the percentage earned from the max possible points
+  //   return Math.floor(100 * (earnedPoints / maxPoints)) || 0
+  // }
+
+  // $: habitScore = calcHabitScore(habitData)
 
   // RANK ------------------------------------------------------------------------------------
-  let currentRank, rankProgress
 
   let ranks = [
-    { title: 'Newbie', min: 0, max: 9, color: '#000', img: '0.svg' },
-    { title: 'Greenhorn', min: 10, max: 29, color: '#3CB54A', img: '1.1.svg' },
-    { title: 'Tough Guy', min: 30, max: 49, color: '#BD6428', img: '2.1.svg' },
-    { title: 'Smooth Sailor', min: 50, max: 69, color: '#3CB54A', img: '3.1.svg' },
-    { title: 'Hardcore Habiteer', min: 70, max: 84, color: '#3689C9', img: '4.1.svg' },
-    { title: 'Shining Star', min: 85, max: 94, color: '#FFCB5B', img: '5.1.svg' },
-    { title: 'Master', min: 95, max: 100, color: '#000', img: '6.svg' }
+    { num: 0, title: 'Newbie', min: 0, max: 9, color: '#000', img: '0.svg' },
+    { num: 1, title: 'Greenhorn', min: 10, max: 29, color: '#3CB54A', img: '1.1.svg' },
+    { num: 2, title: 'Tough Guy', min: 30, max: 49, color: '#BD6428', img: '2.1.svg' },
+    { num: 3, title: 'Smooth Sailor', min: 50, max: 69, color: '#3689C9', img: '3.1.svg' },
+    { num: 4, title: 'Hardcore Habiteer', min: 70, max: 84, color: '#EE2C39', img: '4.1.svg' },
+    { num: 5, title: 'Shining Star', min: 85, max: 94, color: '#FFCB5B', img: '5.1.svg' },
+    { num: 6, title: 'Master', min: 95, max: 100, color: '#000', img: '6.svg' }
   ]
 
   $: currentRank = ranks.find(rank => habitScore >= rank.min && habitScore <= rank.max) || {}
-  $: rankProgress = (habitScore - currentRank.min / currentRank.max - currentRank.min) * 10
+  $: rankProgress = ((habitScore - currentRank.min) / (currentRank.max - currentRank.min)) * 100
+  $: myBadges = ranks.reduce((list, nextRank) => {
+    if (nextRank.num <= currentRank.num) {
+      return list.concat([nextRank.img])
+    } else return list
+  }, [])
+
   //HABIT CRUD ----------------------------------------------------------------------------
   let habitData
 
@@ -259,12 +266,8 @@
         style="width: {rankProgress}%; background: {currentRank.color};"
       ></div>
       <div class="rank-badges">
-        {#each new Array(currentRank) as name, index}
-        <img
-          src="badges/chevron-{index}.svg"
-          in:fly="{{ x: 30, duration:1000 }}"
-          out:fly="{{ y: -30, duration:1000 }}"
-        />
+        {#each myBadges as badge}
+        <img src="badges/{badge}" in:fly="{{ x: 30, duration:1000 }}" out:fly="{{ y: -30, duration:1000 }}" />
         {/each}
       </div>
     </div>
