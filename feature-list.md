@@ -9,6 +9,7 @@
 - [ ] add faq
 - [ ] old habits are hidden under a "show/hide" toggle
 - [ ] flesh out the ranking/score system. look for examples of existing ranking system in video games
+- [ ] range of habit score is only 90 days
 
 ## Future
 - [ ] defer habit score updates until after a day is out of edit mode
@@ -18,5 +19,8 @@
 - [ ] set habit icon
 - [ ] add database and auth for registered users
 - [ ] sections can be folded to hide
+- [ ] add optional 'short' value on habits that displays in read mode. it's just a field with a max-length. can be text, symbols, emoji, whatever
+- [x] add notes section which auto sizes
+- [ ] habit importance should drop off as it goes further into the past
 
 

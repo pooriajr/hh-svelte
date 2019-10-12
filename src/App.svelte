@@ -279,13 +279,11 @@
             <input class="title" bind:value="{habit.title}" placeholder="Title" autofocus />
             {:else}
             <input class="title" disabled value="{habit.title}" placeholder="Title" />
+            {/if} {#if habit.id === editModeId}
+            <div contenteditable="true" class="notes" bind:innerHTML="{habit.notes}" placeholder="Notes"></div>
+            {:else}
+            <div contenteditable="false" class="notes" bind:innerHTML="{habit.notes}" placeholder="Notes"></div>
             {/if}
-            <input
-              class="description"
-              disabled="{habit.id !== editModeId}"
-              bind:value="{habit.description}"
-              placeholder="Description"
-            />
           </div>
           <div class="controls">
             {#if habit.id === editModeId}
@@ -497,8 +495,10 @@
     font-size: 18px;
     font-weight: bold;
   }
-  .habit .fields .description {
-    font-size: 10px;
+  .habit .fields .notes {
+    font-size: 12px;
+    background: #fff;
+    padding: 3px;
   }
   .habit .controls {
     margin-top: 3px;
