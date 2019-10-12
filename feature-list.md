@@ -3,7 +3,7 @@
 ##  Demo MVP
 - [x] add local storage for demo users
 - [ ] add email optin
-- [ ] create read-only cells which show habits nicely and don't care about clickability
+- [x] create read-only cells which show habits nicely and don't care about clickability
 - [x] clicking a cell expands it into edit mode and allows editing records. 
 - [ ] set habit size
 - [ ] add faq
