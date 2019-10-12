@@ -7,7 +7,7 @@
 - [x] clicking a cell expands it into edit mode and allows editing records. 
 - [ ] set habit size
 - [ ] old habits are hidden under a "show/hide" toggle
-- [ ] flesh out the ranking/score system. look for examples of existing ranking system in video games
+- [x] flesh out the ranking/score system. look for examples of existing ranking system in video games
 - [ ] range of habit score is only 90 days
 - [ ] add random habit generator
 
