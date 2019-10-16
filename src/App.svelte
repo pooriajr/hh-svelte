@@ -499,19 +499,19 @@
     align-items: center;
     margin: 10px 0;
     height: 35px;
-    padding: 6px;
+    padding: 7px;
   }
   .badge-spacer {
-    position: relative;
     display: flex;
     justify-content: center;
   }
   .badge {
     width: 30px;
-    transition: 1s;
+    transition: 0.5s;
   }
   .badge-spacer:last-child .badge {
-    width: 35px;
+    width: 42px;
+    margin-left: 6px;
   }
 
   .section {
