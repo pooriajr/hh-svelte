@@ -124,7 +124,7 @@
 
   $: calcHabitScore(habitData)
 
-    //HABIT CRUD ----------------------------------------------------------------------------
+  //HABIT CRUD ----------------------------------------------------------------------------
   let habitData
 
   if (window.localStorage.getItem('habitData')) {
@@ -203,6 +203,7 @@
   let editModeId = ''
   let progressBarColor = '#2196f3'
   let activeCell = ''
+  let subscribed = false
 
   function toggleSidebar() {
     sidebarActive = !sidebarActive
@@ -214,6 +215,7 @@
   }
 </script>
 
+<!-- ! HEADER -->
 <div class="header">
   <div class="header-left">
     <button class="mobile hamburger" on:click="{toggleSidebar}">{ sidebarActive ? '✕' : '☰' }</button>
@@ -232,14 +234,16 @@
   </div>
 </div>
 <div class="body">
+  <!-- ! SIDEBAR -->
   <div class="sidebar" class:active="{sidebarActive}">
     <div class="section score">
       <div class="section-top">
         <div class="section-title">Habit Rank</div>
         <button>?</button>
       </div>
-     <Rank {habitScore}/> 
+      <Rank {habitScore}></Rank>
     </div>
+
     <div class="section habits">
       <div class="section-top">
         <div class="section-title">Habits</div>
@@ -284,9 +288,28 @@
         </div>
         {/if}
       </div>
+      {:else}
+      <div>No habits... Hit that "Add New" button and get started!</div>
       {/each}
     </div>
+
+    <div class="section-habits">
+      <div class="section-top">
+        <div class="section-title">Stay updated</div>
+      </div>
+      {#if subscribed}
+      <p>You're signed up 👍</p>
+      {:else}
+      <small>Get special perks & future updates!</small>
+      <form name="contact" method="POST" data-netlify="true" on:submit={() => {subscribed = true}}>
+        <input required type="email" name="email" placeholder="email@example.com" />
+        <button type="submit">Stay updated</button>
+      </form>
+      {/if}
+    </div>
   </div>
+
+  <!-- ! CALENDAR -->
   <div class="calendar">
     <div class="day-row">
       <div>S</div>
@@ -660,6 +683,10 @@
   .other-month.today .cell-date {
     color: #ccc;
     background: none;
+  }
+
+  input {
+    max-width: 100%;
   }
 
   button {

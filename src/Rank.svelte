@@ -1,5 +1,4 @@
 <script>
-  // RANK ------------------------------------------------------------------------------------
   export let habitScore
 
   import { fade, fly } from 'svelte/transition'
@@ -49,24 +48,26 @@
   }, [])
 </script>
 
-<input type="number" bind:value="{habitScore}" />
-<div class="current-rank" style="color:{myRank.color};">{myRank.title}</div>
-<div
-  class="rank-progress-bar"
-  id="progress-bar"
-  style="width: {rankProgress * 100}%; background: {myRank.color};"
-></div>
-<div class="rank-badges">
-  {#each myBadges as badge}
+<div>
+  <input type="number" bind:value="{habitScore}" />
+  <div class="current-rank" style="color:{myRank.color};">{myRank.title}</div>
   <div
-    class="badge-spacer"
-    style="width:{100 / totalBadgeCount}%;"
-    in:fly="{{ x: 30, duration:1000 }}"
-    out:fly="{{ y: -30, duration:1000 }}"
-  >
-    <img class="badge" src="badges/{badge}" alt="" />
+    class="rank-progress-bar"
+    id="progress-bar"
+    style="width: {rankProgress * 100}%; background: {myRank.color};"
+  ></div>
+  <div class="rank-badges">
+    {#each myBadges as badge}
+    <div
+      class="badge-spacer"
+      style="width:{100 / totalBadgeCount}%;"
+      in:fly="{{ x: 30, duration:1000 }}"
+      out:fly="{{ y: -30, duration:1000 }}"
+    >
+      <img class="badge" src="badges/{badge}" alt="" />
+    </div>
+    {/each}
   </div>
-  {/each}
 </div>
 
 <style>
