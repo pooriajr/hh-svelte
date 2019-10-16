@@ -301,7 +301,7 @@
       <p>You're signed up 👍</p>
       {:else}
       <small>Get special perks & future updates!</small>
-      <form name="contact" method="POST" data-netlify="true" on:submit={() => {subscribed = true}}>
+      <form method="POST" on:submit={() => {subscribed = true}}>
         <input required type="email" name="email" placeholder="email@example.com" />
         <button type="submit">Stay updated</button>
       </form>
