@@ -2,6 +2,7 @@
   import Rank from './Rank.svelte'
   import { fade, fly } from 'svelte/transition'
   import { flip } from 'svelte/animate'
+  import axios from 'axios'
 
   import {
     startOfMonth,
@@ -301,9 +302,28 @@
       <p>You're signed up 👍</p>
       {:else}
       <small>Get special perks & future updates!</small>
-      <form method="POST" on:submit={() => {subscribed = true}}>
+      <!-- <form name="subscribe" method="POST" on:submit={() => {subscribed = true}}>
+         <input type="hidden" name="form-name" value="subscribe" />
         <input required type="email" name="email" placeholder="email@example.com" />
         <button type="submit">Stay updated</button>
+      </form> -->
+      <form name="contact" id="email-form" method="post" on:submit|preventDefault={(e) => {
+        var form = document.getElementById(email-form) 
+        axios.post(form.getAttribute('action'),{name: 'foo', email:'pjrgmail.com', message:'bleh'}).then(()=>{window.alert('thanks')})
+      }}>
+        <input type="hidden" name="form-name" value="contact" />
+        <p>
+          <label>Your Name: <input type="text" name="name"/></label>
+        </p>
+        <p>
+          <label>Your Email: <input type="email" name="email"/></label>
+        </p>
+        <p>
+          <label>Message: <textarea name="message"></textarea></label>
+        </p>
+        <p>
+          <button type="submit">Send</button>
+        </p>
       </form>
       {/if}
     </div>

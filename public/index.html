@@ -12,8 +12,10 @@
 
     <script defer src="/bundle.js"></script>
     <!-- prerended form for netlify -->
-    <form name="subscribe" hidden method="POST" data-netlify="true">
-      <input name="email" />
+    <form name="contact" netlify netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <textarea name="message"></textarea>
     </form>
   </head>
 
