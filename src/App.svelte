@@ -20,11 +20,7 @@
     isAfter
   } from 'date-fns'
 
-  let uuid = function b(a) {
-    return a
-      ? (a ^ ((Math.random() * 16) >> (a / 4))).toString(16)
-      : ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, b)
-  }
+  import {newBlankHabit} from './habitGenerator.js'
 
   // CALENDAR ----------------------------------------------------------------------------
 
@@ -164,17 +160,10 @@
     }
   }
 
-  function addHabit() {
-    const id = uuid()
-    const startDate = startOfDay(new Date())
-    habitData[id] = {
-      id,
-      title: '',
-      importance: 1,
-      startDate,
-      endDate: addDays(startDate, 30),
-      records: {}
-    }
+  function createHabit() {
+    const newHabit = newBlankHabit()
+    const id = newHabit.id
+    habitData[id] = newHabit
     //automatically start editing new habit
     editModeId = id
   }
@@ -248,7 +237,7 @@
     <div class="section habits">
       <div class="section-top">
         <div class="section-title">Habits</div>
-        <button on:click="{addHabit}">Add New</button>
+        <button on:click="{createHabit}">Add New</button>
       </div>
       {#each Object.values(habitData).reverse() as habit (habit.id)}
       <div
