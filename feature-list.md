@@ -2,6 +2,7 @@
 
 ## Demo MVP
 
+- [ ] let user edit start and end date (jquery date picker)
 - [x] add local storage for demo users
 - [ ] add email optin
 - [x] create read-only cells which show habits nicely and don't care about clickability
@@ -10,9 +11,8 @@
 - [x] flesh out the ranking/score system. look for examples of existing ranking system in video games
 - [ ] range of habit score is only 90 days
 - [ ] add random habit generator
-- [ ] let user edit start and end date
-- [ ] future dates are empty
-- [ ] tomorrow shows a message
+- [x] future dates are empty
+- [x] tomorrow shows a message
 - [x] deploy
 
 ## Future

@@ -25,6 +25,7 @@
   // CALENDAR ----------------------------------------------------------------------------
 
   let today = startOfDay(new Date())
+  let tomorrow = addDays(today, 1)
   let displayDate = today
 
   function generateDayArray(startDate, habitData) {
@@ -328,6 +329,7 @@
         class="cell"
         class:other-month="{!isSameMonth(day.date, displayDate)}"
         class:today="{isSameDay(day.date,today)}"
+        class:tomorrow="{isSameDay(day.date,tomorrow)}"
         on:click="{() => {activeCell = day.date}}"
         class:active="{day.date === activeCell}"
         disabled="{isAfter(day.date,today)}"
@@ -340,7 +342,11 @@
             <button class="cell-close" on:click|stopPropagation="{() => {activeCell = ''}}">✕</button>
             {/if}
           </div>
-          {#each day.habits as habit (habit.id)} {#if day.date === activeCell}
+          {#if isSameDay(day.date, tomorrow)}
+          <p>Check back tomorrow to log more habits!</p>
+          {:else if day.date > tomorrow}
+          <div></div>
+          {:else} {#each day.habits as habit (habit.id)} {#if day.date === activeCell}
           <button
             class="cell-habit active"
             on:click="{() => cycleRecord(habit.id, day.fDate)}"
@@ -361,7 +367,7 @@
               {habit.title || '?'}
             </span>
           </div>
-          {/if} {/each}
+          {/if} {/each} {/if}
         </div>
       </button>
       {/each}
@@ -644,7 +650,9 @@
   .cell-habit.active {
     border-radius: 3px;
     margin-bottom: 4px;
-    height: 30px;
+    min-height: 30px;
+    white-space: initial;
+    overflow: initial;
     font-size: 12px;
     color: rgb(0, 0, 0, 0.7);
   }
@@ -666,8 +674,14 @@
     color: white;
     background-color: #2196f3;
   }
+  .cell.tomorrow p {
+    margin: auto;
+    font-size: 10px;
+    color: rgb(0, 0, 0, 0.5);
+    font-style: italic;
+  }
 
-  .other-month {
+  .cell .other-month {
     background: white;
     color: #ccc;
   }
