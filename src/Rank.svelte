@@ -13,18 +13,18 @@
       color: '#3CB54A',
       badges: ['1.1.svg', '1.2.svg', '1.3.svg', '1.4.svg']
     },
-    { num: 2, title: 'Tough Guy', min: 30, max: 49, color: '#BD6428', badges: ['2.1.svg', '2.2.svg', '2.3.svg'] },
+    { num: 2, title: 'Tough Cookie', min: 30, max: 49, color: '#BD6428', badges: ['2.1.svg', '2.2.svg', '2.3.svg'] },
     { num: 3, title: 'Smooth Sailor', min: 50, max: 69, color: '#3689C9', badges: ['3.1.svg', '3.2.svg', '3.3.svg'] },
     {
       num: 4,
-      title: 'Hardcore Habiteer',
+      title: 'Unbreakable',
       min: 70,
       max: 84,
       color: '#EE2C39',
       badges: ['4.1.svg', '4.2.svg', '4.3.svg']
     },
-    { num: 5, title: 'Shining Star', min: 85, max: 94, color: '#ec9c0d', badges: ['5.1.svg', '5.2.svg', '5.3.svg'] },
-    { num: 6, title: 'Master', min: 95, max: 100, color: '#1f3d52', badges: ['6.svg'] }
+    { num: 5, title: 'Star Player', min: 85, max: 94, color: '#ec9c0d', badges: ['5.1.svg', '5.2.svg', '5.3.svg'] },
+    { num: 6, title: 'Habit Master', min: 95, max: 100, color: '#1f3d52', badges: ['6.svg'] }
   ]
 
   let totalBadgeCount = 18
