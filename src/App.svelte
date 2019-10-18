@@ -20,7 +20,7 @@
     isAfter
   } from 'date-fns'
 
-  import {newBlankHabit} from './habitGenerator.js'
+  import { newBlankHabit, newRandomHabit } from './habitGenerator.js'
 
   // CALENDAR ----------------------------------------------------------------------------
 
@@ -168,6 +168,14 @@
     editModeId = id
   }
 
+  function createRandomHabit() {
+    const newHabit = newRandomHabit()
+    const id = newHabit.id
+    habitData[id] = newHabit
+    //automatically start editing new habit
+    editModeId = id
+  }
+
   function deleteHabit(id) {
     //trigger a rerender
     habitData[id] = habitData[id]
@@ -237,7 +245,10 @@
     <div class="section habits">
       <div class="section-top">
         <div class="section-title">Habits</div>
-        <button on:click="{createHabit}">Add New</button>
+        <div>
+          <button on:click="{createHabit}">Add New</button>
+          <button on:click="{createRandomHabit}">🎲</button>
+        </div>
       </div>
       {#each Object.values(habitData).reverse() as habit (habit.id)}
       <div
@@ -291,28 +302,9 @@
       <p>You're signed up 👍</p>
       {:else}
       <small>Get special perks & future updates!</small>
-      <!-- <form name="subscribe" method="POST" on:submit={() => {subscribed = true}}>
-         <input type="hidden" name="form-name" value="subscribe" />
-        <input required type="email" name="email" placeholder="email@example.com" />
-        <button type="submit">Stay updated</button>
-      </form> -->
-      <form name="contact" id="email-form" method="post" on:submit|preventDefault={(e) => {
-        var form = document.getElementById(email-form) 
-        axios.post(form.getAttribute('action'),{name: 'foo', email:'pjrgmail.com', message:'bleh'}).then(()=>{window.alert('thanks')})
-      }}>
-        <input type="hidden" name="form-name" value="contact" />
-        <p>
-          <label>Your Name: <input type="text" name="name"/></label>
-        </p>
-        <p>
-          <label>Your Email: <input type="email" name="email"/></label>
-        </p>
-        <p>
-          <label>Message: <textarea name="message"></textarea></label>
-        </p>
-        <p>
-          <button type="submit">Send</button>
-        </p>
+      <form>
+        <input type="email" name="email" />
+        <button type="submit">Send</button>
       </form>
       {/if}
     </div>

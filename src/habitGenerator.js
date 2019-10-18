@@ -1,4 +1,5 @@
 import { addDays, startOfDay } from 'date-fns'
+import _ from 'lodash'
 
 let uuid = function b(a) {
   return a
@@ -12,9 +13,34 @@ export const newBlankHabit = () => {
   return {
     id,
     title: '',
+    notes: '',
     importance: 1,
     startDate,
     endDate: addDays(startDate, 30),
     records: {}
   }
 }
+
+export const newRandomHabit = () => {
+  const id = uuid()
+  const startDate = startOfDay(new Date())
+  return {
+    id,
+    title: _.sample(randomTitles),
+    notes: '',
+    importance: 1,
+    startDate,
+    endDate: addDays(startDate, 30),
+    records: {}
+  }
+}
+
+const randomTitles = [
+  'Meditation',
+  'Talk a walk',
+  'Do something active',
+  'Read a book',
+  'No soda',
+  'Morning Routine',
+  'No electronics in bed'
+]
