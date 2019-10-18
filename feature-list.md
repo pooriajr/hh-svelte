@@ -10,6 +10,9 @@
 - [x] flesh out the ranking/score system. look for examples of existing ranking system in video games
 - [ ] range of habit score is only 90 days
 - [ ] add random habit generator
+- [ ] let user edit start and end date
+- [ ] future dates are empty
+- [ ] tomorrow shows a message
 - [x] deploy
 
 ## Future
@@ -26,3 +29,4 @@
 - [x] add notes section which auto sizes
 - [ ] habit importance should drop off as it goes further into the past
 - [ ] add reference button that shows more info in little windows all over
+- [ ] let user resize sidebar (draggable || cosmetic menu option)
