@@ -17,7 +17,11 @@
     isWithinInterval,
     startOfDay,
     lightFormat,
-    isAfter
+    format,
+    isAfter,
+    parseISO,
+    differenceInCalendarDays,
+    isValid
   } from 'date-fns'
 
   import { newBlankHabit, newRandomHabit } from './habitGenerator.js'
@@ -193,6 +197,29 @@
     window.localStorage.setItem('habitData', JSON.stringify(habitData))
   }
 
+  function updateDates(habitId) {
+    const newStart = parseISO(document.getElementById('newStart').value)
+    if (!isValid(newStart)) {
+      return window.alert('START date is invalid, make the format YYY-MM-DD')
+    }
+
+    const newEnd = parseISO(document.getElementById('newEnd').value)
+    if (!isValid(newEnd)) {
+      return window.alert('END date is invalid, make the format YYY-MM-DD')
+    }
+
+    if (isAfter(newStart, newEnd)) {
+      return window.alert("You can't set the START date to AFTER the END date.")
+    }
+
+    if (isAfter(newStart, today)) {
+      return window.alert("You can't set a START date in the future.")
+    }
+
+    habitData[habitId].startDate = newStart
+    habitData[habitId].endDate = newEnd
+  }
+
   $: saveHabitData(habitData)
 
   // UI Stuff ---------------------------------------------------------------------------------
@@ -263,10 +290,23 @@
             {#if habit.id === editModeId}
             <!-- svelte-ignore a11y-autofocus -->
             <input class="title" bind:value="{habit.title}" placeholder="Title" autofocus />
-            <div contenteditable="true" class="notes" bind:innerHTML="{habit.notes}" placeholder="Notes"></div>
+            <div contenteditable="true" class="notes" bind:innerHTML="{habit.notes}"></div>
+            <label>
+              Start :
+            </label>
+            <input id="newStart" value="{lightFormat(habit.startDate, 'yyyy-MM-dd')}" />
+            <label>
+              End:
+            </label>
+            <input id="newEnd" value="{lightFormat(habit.endDate, 'yyyy-MM-dd')}" />
+            <button on:click|preventDefault="{() => {updateDates(habit.id)}}">Update Dates</button>
             {:else}
             <input class="title" disabled value="{habit.title}" placeholder="Title" />
-            <div contenteditable="false" class="notes" bind:innerHTML="{habit.notes}" placeholder="Notes"></div>
+            <div contenteditable="false" class="notes" bind:innerHTML="{habit.notes}"></div>
+            <div class="date-range">
+              {format(habit.startDate, 'MMM dd')} to {format(habit.endDate, 'MMM dd')}<br />
+              ({differenceInCalendarDays(habit.endDate, habit.startDate) + 1} days)
+            </div>
             {/if}
           </div>
           <div class="controls">
@@ -509,6 +549,11 @@
     border: none;
     color: #f44336;
     text-decoration: underline;
+  }
+  .habit .date-range {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.6);
+    padding: 3px;
   }
 
   .deleteConfirmOverlay {

@@ -2,7 +2,7 @@
 
 ## Demo MVP
 
-- [ ] let user edit start and end date (jquery date picker)
+- [ ] let user edit start and end date - records that fall outside the new date rand must be deleted, with a warning 
 - [x] add local storage for demo users
 - [ ] add email optin
 - [x] create read-only cells which show habits nicely and don't care about clickability

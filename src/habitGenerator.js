@@ -16,7 +16,7 @@ export const newBlankHabit = () => {
     notes: '',
     importance: 1,
     startDate,
-    endDate: addDays(startDate, 30),
+    endDate: addDays(startDate, 29),
     records: {}
   }
 }
@@ -30,7 +30,7 @@ export const newRandomHabit = () => {
     notes: '',
     importance: 1,
     startDate,
-    endDate: addDays(startDate, 30),
+    endDate: addDays(startDate, 29),
     records: {}
   }
 }
