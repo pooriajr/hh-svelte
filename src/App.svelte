@@ -413,7 +413,7 @@
           <p>Check back tomorrow to log more habits!</p>
           {:else if day.date > tomorrow}
           <div></div>
-          {:else} {#each day.habits as habit (habit.id)} {#if day.date === activeCell}
+          {:else} {#each day.habits.slice(0).reverse() as habit (habit.id)} {#if day.date === activeCell}
           <button
             class="cell-habit active"
             on:click="{() => cycleRecord(habit.id, day.fDate)}"
