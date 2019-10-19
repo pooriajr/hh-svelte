@@ -26,7 +26,7 @@
 
   import omit from 'lodash/omit'
 
-  import { newBlankHabit, newRandomHabit } from './habitGenerator.js'
+  import { newBlankHabit } from './habitGenerator.js'
 
   // CALENDAR ----------------------------------------------------------------------------
 
@@ -175,14 +175,6 @@
     editModeId = id
   }
 
-  function createRandomHabit() {
-    const newHabit = newRandomHabit()
-    const id = newHabit.id
-    habitData[id] = newHabit
-    //automatically start editing new habit
-    editModeId = id
-  }
-
   function deleteHabit(id) {
     //trigger a rerender
     habitData[id] = habitData[id]
@@ -302,7 +294,6 @@
         <div class="section-title">Habits</div>
         <div>
           <button on:click="{createHabit}">Add New</button>
-          <button on:click="{createRandomHabit}">🎲</button>
         </div>
       </div>
       {#each Object.values(habitData).reverse() as habit (habit.id)}
