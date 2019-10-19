@@ -1,5 +1,5 @@
 import { addDays, startOfDay } from 'date-fns'
-import _ from 'lodash'
+import sample from 'lodash/sample'
 
 let uuid = function b(a) {
   return a
@@ -26,7 +26,7 @@ export const newRandomHabit = () => {
   const startDate = startOfDay(new Date())
   return {
     id,
-    title: _.sample(randomTitles),
+    title: sample(randomTitles),
     notes: '',
     importance: 1,
     startDate,

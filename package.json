@@ -14,7 +14,7 @@
   "dependencies": {
     "axios": "^0.19.0",
     "date-fns": "^2.4.1",
-    "lodash": "latest",
+    "lodash": "^4.17.15",
     "sirv-cli": "^0.4.4"
   },
   "scripts": {
