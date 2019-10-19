@@ -24,6 +24,8 @@
     isValid
   } from 'date-fns'
 
+  import omit from 'lodash/omit'
+
   import { newBlankHabit, newRandomHabit } from './habitGenerator.js'
 
   // CALENDAR ----------------------------------------------------------------------------
@@ -216,6 +218,31 @@
       return window.alert("You can't set a START date in the future.")
     }
 
+    // Delete records that now fall outside the new date range, with a warning
+    //1. get the list of record IDs that fall outside the date range
+    const recordsToDelete = Object.keys(habitData[habitId].records).filter(key => {
+      if (isWithinInterval(parseISO(key), { start: newStart, end: newEnd })) {
+        return false
+      }
+      return true
+    })
+
+    //2. If there are records, let user confirm is they want to delete
+    if (recordsToDelete.length) {
+      if (
+        window.confirm(
+          `Heads up! When you change the date range of your habit, days outside of the new range will be nullified. For this change, ${recordsToDelete.length} day(s) will be effected. This may effect your rank. Confirm this change?`
+        )
+      ) {
+        habitData[habitId].records = omit(habitData[habitId].records, recordsToDelete)
+        habitData[habitId].startDate = newStart
+        habitData[habitId].endDate = newEnd
+      } else {
+        return
+      }
+    }
+
+    //3. if there are no records, just make the change
     habitData[habitId].startDate = newStart
     habitData[habitId].endDate = newEnd
   }
