@@ -364,11 +364,12 @@
       <p>You're signed up 👍</p>
       {:else}
       <small>Get special perks & future updates!</small>
-      <form>
+      <form name="sign-up" method="post">
+        <input type="hidden" name="form-name" value="sign-up" />
         <input type="email" name="email" />
         <button type="submit">Send</button>
       </form>
-      <a href="/contact.html">Test Me</a>
+      <a href="/thank-you">Test Me</a>
       {/if}
     </div>
   </div>
