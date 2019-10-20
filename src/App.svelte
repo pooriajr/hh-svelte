@@ -368,6 +368,7 @@
         <input type="email" name="email" />
         <button type="submit">Send</button>
       </form>
+      <a href="/contact.html">Test Me</a>
       {/if}
     </div>
   </div>
