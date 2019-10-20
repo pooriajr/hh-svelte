@@ -3,7 +3,7 @@
 ## Demo MVP
 
 - [ ] add email optin
-- [ ] completed habits are hidden under a "show/hide" toggle
+- [x] completed habits are marked complete
 - [ ] range of habit score is only 90 days
 - [x] let user edit start and end date - records that fall outside the new date rand must be deleted, with a warning 
 - [x] add local storage for demo users
@@ -16,6 +16,7 @@
 
 ## Future
 
+- [ ] completed habits are hidden under a "show/hide" toggle
 - [ ] add random habit generator
 - [ ] defer habit score updates until after a day is out of edit mode
 - [ ] add a separate visual control panel for "cosmetic effects"

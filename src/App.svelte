@@ -320,10 +320,13 @@
             <button on:click|preventDefault="{() => {updateDates(habit.id)}}">Update Dates</button>
             {:else}
             <input class="title" disabled value="{habit.title}" placeholder="Title" />
+            <small class="day-counter">
+              {isAfter(today,habit.endDate) ? 'Completed ✓' : `Day ${differenceInCalendarDays(today, habit.startDate) +
+              1} of ${differenceInCalendarDays(habit.endDate, habit.startDate) + 1}`}
+            </small>
             <div contenteditable="false" class="notes" bind:innerHTML="{habit.notes}"></div>
             <div class="date-range">
-              {format(habit.startDate, 'MMM dd')} to {format(habit.endDate, 'MMM dd')}<br />
-              ({differenceInCalendarDays(habit.endDate, habit.startDate) + 1} days)
+              {format(habit.startDate, 'MMM dd')} to {format(habit.endDate, 'MMM dd')}
             </div>
             {/if}
           </div>
@@ -571,6 +574,9 @@
   .habit .date-range {
     font-size: 12px;
     color: rgba(0, 0, 0, 0.6);
+    padding: 3px;
+  }
+  .habit .day-counter {
     padding: 3px;
   }
 
