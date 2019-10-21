@@ -369,7 +369,6 @@
         <input type="email" name="email" />
         <button type="submit">Send</button>
       </form>
-      <a href="/thank-you">Test Me</a>
       {/if}
     </div>
   </div>
