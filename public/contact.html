@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="./global.css" />
+    <title>Contact</title>
+  </head>
+  <style>
+    body {
+      padding-top: 30px;
+      max-width: 600px;
+      margin: auto;
+    }
+    button {
+      display: block;
+      margin-left: auto;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+    }
+    label {
+      margin-bottom: 6px;
+    }
+  </style>
+  <body>
+    <a href="/">← Back to Habit Helper</a>
+    <h2>Get In Touch</h2>
+    <p>Questions, issues, suggestions, and anything else. I want to hear from you!</p>
+    <form name="contact" method="POST" data-netlify="true">
+      <label>Your email:</label>
+      <input type="email" name="email" required placeholder="email@example.com" />
+      <label>Your message:</label>
+      <textarea name="message"></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+
+    <p>
+      Or if you prefer, just shoot me an email at <a href="mailto:pjrashidi@gmail.com">pjrashidi@gmail.com</a>. And
+      yeah, that's my personal email :)
+    </p>
+  </body>
+</html>

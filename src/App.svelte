@@ -378,6 +378,11 @@
       </button>
       {/each}
     </div>
+    <div class="calendar-footer">
+        <a href="/contact">
+          Questions, Issues, Suggestions →
+        </a>
+      </div>
   </div>
 </div>
 
@@ -558,11 +563,12 @@
   .calendar {
     width: 100%;
     background: white;
+    margin-left: 8px;
   }
 
   .day-row {
     display: flex;
-    padding-bottom: 4px;
+    height: 13px;
   }
   .day-row div {
     width: 100%;
@@ -573,13 +579,26 @@
 
   .day-grid {
     width: 100%;
-    height: 95%;
+    /* subtract the height of day row and calendar footer */
+    height: calc(100% - 43px); 
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     grid-template-rows: repeat(6, 1fr);
     grid-gap: 1px;
     background: #d4d4d4;
     border: 1px solid #d4d4d4;
+  }
+
+  .calendar-footer{
+    height: 30px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .calendar-footer a {
+    color: #757575
   }
 
   .cell {
