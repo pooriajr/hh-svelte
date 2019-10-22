@@ -466,17 +466,18 @@
   .sidebar {
     width: 0px;
     transition: 0.1s;
-    padding-right: 8px;
     position: relative;
     left: -220px;
     overflow-y: auto;
   }
   .sidebar.active {
+    padding-right: 8px;
     min-width: 220px;
     left: 0;
   }
   @media (min-width: 600px) {
     .sidebar {
+      padding-right: 8px;
       min-width: 220px;
       left: 0;
     }

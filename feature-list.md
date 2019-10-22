@@ -3,6 +3,9 @@
 ## Demo MVP
 
 - [ ] create default example habits
+- [ ] create support form
+- [ ] credit badges guy
+- [ ] add habit rank info toggle
 - [x] handle negative rank
 - [x] add email optin
 - [x] completed habits are marked complete
