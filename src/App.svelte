@@ -445,13 +445,13 @@
     overflow-y: auto;
   }
   .sidebar.active {
-    padding-right: 8px;
+    margin-right: 8px;
     min-width: 220px;
     left: 0;
   }
   @media (min-width: 600px) {
     .sidebar {
-      padding-right: 8px;
+      margin-right: 8px;
       min-width: 220px;
       left: 0;
     }
@@ -463,8 +463,10 @@
   .section-top {
     display: flex;
     justify-content: space-between;
+    align-items: flex-end;
     border-bottom: 1px solid #ccc;
     margin-bottom: 10px;
+    padding-bottom: 6px;
   }
   .section-top .section-title {
     font-size: 16px;
@@ -472,6 +474,7 @@
   }
   .section-top button {
     font-size: 12px;
+    margin: 0;
   }
 
   .habit {
@@ -563,7 +566,6 @@
   .calendar {
     width: 100%;
     background: white;
-    margin-left: 8px;
   }
 
   .day-row {
