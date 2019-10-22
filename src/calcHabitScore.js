@@ -33,5 +33,5 @@ export default function calcHabitScore(habitData = {}) {
   })
 
   //finally, assuming a 1 in every array spot is a perfect score, calculate the end score
-  return Math.ceil((sum(dayScores) / dayScores.length) * 100)
+  return (sum(dayScores) / dayScores.length) * 100
 }

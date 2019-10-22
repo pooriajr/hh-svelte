@@ -2,6 +2,7 @@
 
 ## Demo MVP
 
+- [ ] create default example habits
 - [ ] handle negative rank
 - [x] add email optin
 - [x] completed habits are marked complete
