@@ -2,7 +2,7 @@
 
 ## Demo MVP
 
-- [ ] create default example habits
+- [x] create default example habits
 - [ ] create support form
 - [ ] credit badges guy
 - [ ] add habit rank info toggle

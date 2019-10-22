@@ -9,6 +9,7 @@
     startOfWeek,
     eachDayOfInterval,
     addDays,
+    subDays,
     isSameMonth,
     isSameDay,
     addMonths,
@@ -28,6 +29,7 @@
 
   import { newBlankHabit } from './habitGenerator.js'
   import calcHabitScore from './calcHabitScore.js'
+  import generateExampleHabits from './generateExampleHabits.js'
 
   // CALENDAR ----------------------------------------------------------------------------
 
@@ -118,33 +120,7 @@
       habitData[key].endDate = new Date(habitData[key].endDate)
     })
   } else {
-    habitData = {
-      123: {
-        id: 123,
-        title: 'The Plan',
-        startDate: new Date(2019, 9, 1),
-        endDate: new Date(2019, 9, 11),
-        importance: 1,
-        records: {
-          '2019-10-01': true,
-          '2019-10-02': false,
-          '2019-10-03': true
-        }
-      },
-      234: {
-        id: 234,
-        title: 'Meditation',
-        startDate: new Date(2019, 9, 2),
-        endDate: new Date(2019, 10, 1),
-        importance: 1,
-        records: {
-          '2019-10-02': true,
-          '2019-10-03': true,
-          '2019-10-09': false,
-          '2019-10-10': true
-        }
-      }
-    }
+    habitData = generateExampleHabits()
   }
 
   function createHabit() {
@@ -282,19 +258,20 @@
           <div class="fields">
             {#if habit.id === editModeId}
             <!-- svelte-ignore a11y-autofocus -->
-            <input class="title" bind:value="{habit.title}" placeholder="Title" autofocus />
+            <input class="habit-title" bind:value="{habit.title}" placeholder="Title" autofocus />
+            <label>Notes (optional)</label>
             <div contenteditable="true" class="notes" bind:innerHTML="{habit.notes}"></div>
             <label>
-              Start :
+              Start (yyyy-mm-dd)
             </label>
             <input id="newStart" value="{lightFormat(habit.startDate, 'yyyy-MM-dd')}" />
             <label>
-              End:
+              End (yyyy-mm-dd)
             </label>
             <input id="newEnd" value="{lightFormat(habit.endDate, 'yyyy-MM-dd')}" />
             <button on:click|preventDefault="{() => {updateDates(habit.id)}}">Update Dates</button>
             {:else}
-            <input class="title" disabled value="{habit.title}" placeholder="Title" />
+            <h2 class="habit-title" placeholder="Title">{habit.title || '?'}</h2>
             <small class="day-counter">
               {isAfter(today,habit.endDate) ? 'Completed ✓' : `Day ${differenceInCalendarDays(today, habit.startDate) +
               1} of ${differenceInCalendarDays(habit.endDate, habit.startDate) + 1}`}
@@ -497,7 +474,7 @@
     font-variant: all-small-caps;
   }
   .section-top button {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .habit {
@@ -518,29 +495,37 @@
   .habit .fields input {
     border: none;
     width: 100%;
-    margin-bottom: 3px;
+    margin-bottom: 9px;
     padding: 3px;
   }
   .habit .fields input:disabled {
     color: black;
     border-bottom: none;
   }
-  .habit .fields .title {
+  .habit .fields .habit-title {
     font-size: 18px;
     font-weight: bold;
+    margin-bottom: 9px;
   }
   .habit .fields .notes {
     font-size: 12px;
     background: #fff;
     padding: 3px;
+    margin-bottom: 9px;
+  }
+  .habit .fields label {
+    font-size: 14px;
+    margin-bottom: 3px;
   }
   .habit .controls {
-    margin-top: 3px;
+    margin-top: 9px;
     margin-bottom: 0;
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-between;
-    font-size: 12px;
+  }
+  .habit button {
+    font-size: 14px;
   }
   .habit .triggerDeleteOverlay {
     background: none;
@@ -692,6 +677,13 @@
     margin-bottom: 0px;
     color: rgb(0, 0, 0, 0.5);
     flex-grow: 1;
+  }
+  .cell-habit span {
+    width: 100%;
+    padding: 2px;
+    padding: 2px;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
   .cell-habit.active {
     border-radius: 3px;
