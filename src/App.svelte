@@ -623,6 +623,7 @@
     min-height: 100%;
     min-width: 80px;
     transform: scale(1.1);
+    cursor: default;
   }
   .cell-wrapper {
     width: 100%;
@@ -708,8 +709,14 @@
   .cell-habit.success {
     background: #aed581;
   }
+  button.cell-habit.success{
+    border: 1px solid #558b2f;
+  }
   .cell-habit.failure {
     background: #e57373;
+  }
+  button.cell-habit.failure{
+    border: 1px solid #c62828;
   }
   .cell-habit:disabled {
     border: none;
@@ -751,12 +758,5 @@
 
   input {
     max-width: 100%;
-  }
-
-  button {
-    cursor: pointer;
-  }
-  button:disabled {
-    cursor: default;
   }
 </style>
