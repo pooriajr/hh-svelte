@@ -205,6 +205,7 @@
   let editModeId = ''
   let progressBarColor = '#2196f3'
   let activeCell = ''
+  let showRankInfo = false;
 
   function toggleSidebar() {
     sidebarActive = !sidebarActive
@@ -235,9 +236,9 @@
     <div class="section score">
       <div class="section-top">
         <div class="section-title">Habit Rank</div>
-        <button>?</button>
+        <button on:click={()=>{showRankInfo = !showRankInfo}}>{showRankInfo ? 'Hide Info' : '?'}</button>
       </div>
-      <Rank {habitScore}></Rank>
+      <Rank {habitScore} {showRankInfo}></Rank>
     </div>
 
     <div class="section habits">

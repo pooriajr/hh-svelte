@@ -1,5 +1,5 @@
 <script>
-  export let habitScore
+  export let habitScore, showRankInfo
 
   import { fly } from 'svelte/transition'
 
@@ -49,7 +49,20 @@
 </script>
 
 <div>
-  {#if habitScore >= 0}
+  {#if showRankInfo}
+  <div class="rank-info">
+    <p>Your rank is determined by your performance over the last 75 days.</p>
+    <p>Days with success increase your rank.</p>
+    <p>Days with failure hurt it.</p>
+    <p>Days left unmarked hurt your rank <em>slightly</em>.</p>
+    <p>Days where you didn't have any habits in progress have no effect on your rank.</p>
+    <p>
+      And while we're here, credit to
+      <a href="https://www.flaticon.com/authors/dimitry-miroliubov">Dimitry Miroliubov</a> for those slick badge icons.
+      👇
+    </p>
+  </div>
+  {/if} {#if habitScore >= 0}
   <div class="current-rank" style="color:{myRank.color};">{myRank.title}</div>
   <div
     class="rank-progress-bar"
@@ -91,6 +104,9 @@
 </div>
 
 <style>
+  .rank-info {
+    font-size: 13px;
+  }
   .current-rank {
     font-size: 16px;
     font-weight: bold;
