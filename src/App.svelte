@@ -472,12 +472,12 @@
     overflow-y: auto;
   }
   .sidebar.active {
-    width: 220px;
+    min-width: 220px;
     left: 0;
   }
   @media (min-width: 600px) {
     .sidebar {
-      width: 220px;
+      min-width: 220px;
       left: 0;
     }
   }

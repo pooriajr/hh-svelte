@@ -49,7 +49,7 @@
 </script>
 
 <div>
-  <input type="number" bind:value="{habitScore}" />
+  {#if habitScore >= 0}
   <div class="current-rank" style="color:{myRank.color};">{myRank.title}</div>
   <div
     class="rank-progress-bar"
@@ -68,6 +68,26 @@
     </div>
     {/each}
   </div>
+  {:else}
+  <div class="negative-message">
+    <h3>
+      Darn, your score is below zero. 😩
+    </h3>
+    <p>But don't give up.</p>
+    <p>
+      <b>Delete the habit you struggle with most.</b> No shame, we'll get that one later. Get your score back into the
+      positive.
+    </p>
+    <p>If that was your only habit, take a short break. Then start fresh with a <b>more attainable habit.</b></p>
+    <p>
+      If you have other habits don't let them die! Keep that positive momentum.
+    </p>
+    <p>
+      If you want to talk about your habit challenges, email me at
+      <a href="emailto:pjrashidi@gmail.com">pjrashidi@gmail.com</a>
+    </p>
+  </div>
+  {/if}
 </div>
 
 <style>
@@ -105,5 +125,16 @@
   .badge-spacer:last-child .badge {
     width: 42px;
     margin-left: 6px;
+  }
+
+  .negative-message {
+    background: #ffebee;
+    border-radius: 3px;
+    padding: 12px;
+    color: #3e0505;
+  }
+
+  .negative-message p {
+    font-size: 14px;
   }
 </style>
