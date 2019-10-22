@@ -27,6 +27,7 @@
   import omit from 'lodash/omit'
 
   import { newBlankHabit } from './habitGenerator.js'
+  import calcHabitScore from './calcHabitScore.js'
 
   // CALENDAR ----------------------------------------------------------------------------
 
@@ -103,30 +104,9 @@
 
   //HABIT SCORE ----------------------------------------------------------------------------
 
-  let habitScore
+  let habitScore = calcHabitScore()
 
-  function calcHabitScore(habitData) {
-    let maxPoints = 0
-    let earnedPoints = 0
-
-    //1. Iterate over every Habit
-    Object.values(habitData).forEach(habit => {
-      //2. For every day in its duration, add its importance to the maxPoints
-      maxPoints += getHabitDuration(habit) * habit.importance
-      //3. Iterate over the records for this habit
-      Object.values(habit.records).forEach(record => {
-        //4. For every successful record, add the habit's importance to earnedPoints
-        if (record === true) earnedPoints += habit.importance
-        //5. For every failure record, subtract the habit's importance from earnedPoints + a penalty that scales cubicly with importance
-        else if (record === false) earnedPoints -= habit.importance * habit.importance
-      })
-    })
-
-    //6. Calculate the score as the percentage earned from the max possible points
-    habitScore = Math.floor(100 * (earnedPoints / maxPoints)) || 0
-  }
-
-  $: calcHabitScore(habitData)
+  $: habitScore = calcHabitScore(habitData)
 
   //HABIT CRUD ----------------------------------------------------------------------------
   let habitData
@@ -252,11 +232,6 @@
 
   function toggleSidebar() {
     sidebarActive = !sidebarActive
-  }
-
-  // Helper Functions ------------------------------------------------------------------------
-  function getHabitDuration(habit) {
-    return eachDayOfInterval({ start: habit.startDate, end: habit.endDate }).length
   }
 </script>
 

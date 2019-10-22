@@ -2,10 +2,11 @@
 
 ## Demo MVP
 
-- [ ] add email optin
+- [ ] handle negative rank
+- [x] add email optin
 - [x] completed habits are marked complete
-- [ ] range of habit score is only 90 days
-- [x] let user edit start and end date - records that fall outside the new date rand must be deleted, with a warning 
+- [x] range of habit score is only 90 days
+- [x] let user edit start and end date - records that fall outside the new date rand must be deleted, with a warning
 - [x] add local storage for demo users
 - [x] create read-only cells which show habits nicely and don't care about clickability
 - [x] clicking a cell expands it into edit mode and allows editing records.
