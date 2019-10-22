@@ -1,5 +1,6 @@
 <script>
   import Rank from './Rank.svelte'
+  import SignupForm from './SignupForm.svelte'
   import { fade, fly } from 'svelte/transition'
   import { flip } from 'svelte/animate'
   import axios from 'axios'
@@ -204,7 +205,6 @@
   let editModeId = ''
   let progressBarColor = '#2196f3'
   let activeCell = ''
-  let subscribed = false
 
   function toggleSidebar() {
     sidebarActive = !sidebarActive
@@ -312,16 +312,7 @@
       <div class="section-top">
         <div class="section-title">Stay updated</div>
       </div>
-      {#if subscribed}
-      <p>You're signed up 👍</p>
-      {:else}
-      <small>Get special perks & future updates!</small>
-      <form name="sign-up" method="post">
-        <input type="hidden" name="form-name" value="sign-up" />
-        <input type="email" name="email" />
-        <button type="submit">Send</button>
-      </form>
-      {/if}
+      <SignupForm/>
     </div>
   </div>
 
