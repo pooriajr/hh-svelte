@@ -442,6 +442,10 @@
     margin-left: 6px;
   }
 
+  .header-right .arrow {
+    width: 25px;
+  }
+
   .desktop {
     display: none;
   }
@@ -774,6 +778,7 @@
   }
   .cell.tomorrow p {
     margin: auto;
+    margin-top: 15px;
     font-size: 10px;
     color: rgb(0, 0, 0, 0.5);
     font-style: italic;
