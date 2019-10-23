@@ -230,9 +230,9 @@
     <button on:click="{() => displayDate = today}">Today</button>
   </div>
 </div>
-<div class="body">
+<div class="body" class:sidebar-active="{sidebarActive}">
   <!-- ! SIDEBAR -->
-  <div class="sidebar" class:active="{sidebarActive}">
+  <div class="sidebar">
     <div class="section score">
       <div class="section-top">
         <div class="section-title">Habit Rank</div>
@@ -389,7 +389,7 @@
 <style>
   .header {
     text-align: center;
-    height: 50px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -434,9 +434,10 @@
 
   .body {
     display: flex;
-    height: calc(100vh - 60px);
+    height: calc(100vh - 50px);
   }
 
+  /* mobile first sidebar styles */
   .sidebar {
     width: 0px;
     transition: 0.1s;
@@ -444,16 +445,28 @@
     left: -220px;
     overflow-y: auto;
   }
-  .sidebar.active {
+
+  .body.sidebar-active .sidebar{
     margin-right: 8px;
-    min-width: 220px;
+    min-width: 100%;
     left: 0;
   }
+
+  .body.sidebar-active .calendar {
+    width: 0%;
+    display: none;
+  }
+
+  /* force sidebar open after 600px width */
   @media (min-width: 600px) {
     .sidebar {
-      margin-right: 8px;
-      min-width: 220px;
-      left: 0;
+      margin-right: 8px !important;
+      min-width: 220px !important;
+      left: 0 !important;
+    }
+    .calendar {
+    width: 100% !important;
+    display: initial !important;
     }
   }
 
