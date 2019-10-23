@@ -52,9 +52,8 @@
   {#if showRankInfo}
   <div class="rank-info">
     <p>Your rank is determined by your performance over the last 75 days.</p>
-    <p>Days with success increase your rank.</p>
-    <p>Days with failure hurt it.</p>
-    <p>Days left unmarked hurt your rank <em>slightly</em>.</p>
+    <p>Days with <span style="background: #aed581; padding: 2px;">success</span> increase your rank.</p>
+    <p>Days with <span style="background: #e57373; padding: 2px;">failure</span> hurt it.</p>
     <p>Days where you didn't have any habits in progress have no effect on your rank.</p>
     <p>
       And while we're here, credit to
