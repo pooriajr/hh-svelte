@@ -64,11 +64,13 @@
   </div>
   {/if} {#if habitScore >= 0}
   <div class="current-rank" style="color:{myRank.color};">{myRank.title}</div>
-  <div
-    class="rank-progress-bar"
-    id="progress-bar"
-    style="width: {rankProgress * 100}%; background: {myRank.color};"
-  ></div>
+  <div class="rank-progress-bar-wrapper">
+    <div
+      class="rank-progress-bar"
+      id="progress-bar"
+      style="width: {rankProgress * 100}%; background: {myRank.color};"
+    ></div>
+  </div>
   <div class="rank-badges">
     {#each myBadges as badge}
     <div
@@ -116,6 +118,11 @@
   }
   .rank-swapper {
     height: 25px;
+  }
+  .rank-progress-bar-wrapper {
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: inset 0 0 1px 0px #5a5a5a;
   }
   .rank-progress-bar {
     height: 5px;
