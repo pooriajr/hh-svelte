@@ -221,9 +221,8 @@
     {#if sidebarActive}
       <img in:fly="{{ x: -30, duration:100 }}" class="logo mobile" alt="logo" src="habit-helper-logo.svg" />
       <h3  in:fly="{{ x: -30, duration:100 }}"class="logo-type mobile">HH</h3>
-    {:else}
-    <Rank {habitScore} inHeader="true"></Rank>
     {/if}
+      <Rank {habitScore} inHeader="true" hide={sidebarActive}></Rank>
   </div>
   <div class="header-right">
     <p class="month desktop">{monthNames[displayDate.getMonth()]} {displayDate.getFullYear()}</p>

@@ -1,5 +1,5 @@
 <script>
-  export let habitScore, inHeader
+  export let habitScore, inHeader, hide
   import { fly } from 'svelte/transition'
 
   let ranks = [
@@ -47,7 +47,7 @@
   }, [])
 </script>
 
-<div class:inHeader in:fly="{{ x: 30, duration:100 }}">
+<div class:inHeader class:hide>
   {#if habitScore >= 0}
   <div class="current-rank" style="color:{myRank.color};">{myRank.title}</div>
   <div class="rank-progress-bar-wrapper">
@@ -96,6 +96,9 @@
     .inHeader {
       display: none;
     }
+  }
+  .hide {
+    display: none;
   }
   .current-rank {
     font-size: 16px;
