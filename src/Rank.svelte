@@ -1,6 +1,5 @@
 <script>
-  export let habitScore, showRankInfo
-
+  export let habitScore, inHeader
   import { fly } from 'svelte/transition'
 
   let ranks = [
@@ -48,20 +47,8 @@
   }, [])
 </script>
 
-<div>
-  {#if showRankInfo}
-  <div class="rank-info">
-    <p>Your rank is determined by your performance over the last 75 days.</p>
-    <p>Days with <span style="background: #aed581; padding: 2px;">success</span> increase your rank.</p>
-    <p>Days with <span style="background: #e57373; padding: 2px;">failure</span> hurt it.</p>
-    <p>Days where you didn't have any habits in progress have no effect on your rank.</p>
-    <p>
-      And while we're here, credit to
-      <a href="https://www.flaticon.com/authors/dimitry-miroliubov">Dimitry Miroliubov</a> for those slick badge icons.
-      👇
-    </p>
-  </div>
-  {/if} {#if habitScore >= 0}
+<div class:inHeader in:fly="{{ x: 30, duration:100 }}">
+  {#if habitScore >= 0}
   <div class="current-rank" style="color:{myRank.color};">{myRank.title}</div>
   <div class="rank-progress-bar-wrapper">
     <div
@@ -75,8 +62,8 @@
     <div
       class="badge-spacer"
       style="width:{100 / totalBadgeCount}%;"
-      in:fly="{{ x: 30, duration:1000 }}"
-      out:fly="{{ y: -30, duration:1000 }}"
+      in:fly|local="{{ x: 30, duration:1000 }}"
+      out:fly|local="{{ y: -30, duration:1000 }}"
     >
       <img class="badge" src="badges/{badge}" alt="" />
     </div>
@@ -105,8 +92,10 @@
 </div>
 
 <style>
-  .rank-info {
-    font-size: 13px;
+  @media (min-width: 600px) {
+    .inHeader {
+      display: none;
+    }
   }
   .current-rank {
     font-size: 16px;
@@ -115,8 +104,10 @@
     margin-bottom: 2px;
     transition: 0.5s;
   }
-  .rank-swapper {
-    height: 25px;
+  .inHeader .current-rank {
+    font-size: 10px;
+    text-align: left;
+    margin-bottom: 1px;
   }
   .rank-progress-bar-wrapper {
     width: 100%;
@@ -129,12 +120,20 @@
     min-width: 2%;
     transition: 0.8s;
   }
+  .inHeader .rank-progress-bar {
+    height: 4px;
+  }
   .rank-badges {
     display: flex;
     align-items: center;
     margin: 10px 0;
     height: 35px;
     padding: 7px;
+  }
+  .inHeader .rank-badges {
+    height: 25px;
+    margin: 0;
+    padding: 0;
   }
   .badge-spacer {
     display: flex;
@@ -144,9 +143,15 @@
     width: 30px;
     transition: 0.5s;
   }
+  .inHeader .badge {
+    width: 16px;
+  }
   .badge-spacer:last-child .badge {
     width: 42px;
     margin-left: 6px;
+  }
+  .inHeader .badge-spacer:last-child .badge {
+    width: 20px;
   }
 
   .negative-message {

@@ -216,13 +216,18 @@
 <div class="header">
   <div class="header-left">
     <button class="mobile hamburger" on:click="{toggleSidebar}">{ sidebarActive ? '✕' : '☰' }</button>
-    <img class="logo" alt="logo" src="habit-helper-logo.svg" />
+    <img class="logo desktop" alt="logo" src="habit-helper-logo.svg" />
     <h3 class="logo-type desktop">Habit Helper</h3>
-    <h3 class="logo-type mobile">HH</h3>
+    {#if sidebarActive}
+      <img in:fly="{{ x: -30, duration:100 }}" class="logo mobile" alt="logo" src="habit-helper-logo.svg" />
+      <h3  in:fly="{{ x: -30, duration:100 }}"class="logo-type mobile">HH</h3>
+    {:else}
+    <Rank {habitScore} inHeader="true"></Rank>
+    {/if}
   </div>
   <div class="header-right">
-    <p class="desktop">{monthNames[displayDate.getMonth()]} {displayDate.getFullYear()}</p>
-    <p class="mobile">
+    <p class="month desktop">{monthNames[displayDate.getMonth()]} {displayDate.getFullYear()}</p>
+    <p class="month mobile">
       {monthNames[displayDate.getMonth()].substring(0,3)} '{String(displayDate.getFullYear()).substring(2)}
     </p>
     <button class="arrow" on:click="{prevMonth}">&lsaquo</button>
@@ -238,7 +243,20 @@
         <div class="section-title">Habit Rank</div>
         <button on:click={()=>{showRankInfo = !showRankInfo}}>{showRankInfo ? 'Hide Info' : '?'}</button>
       </div>
-      <Rank {habitScore} {showRankInfo}></Rank>
+      {#if showRankInfo}
+      <div class="rank-info">
+        <p>Your rank is determined by your performance over the last 75 days.</p>
+        <p>Days with <span style="background: #aed581; padding: 2px;">success</span> increase your rank.</p>
+        <p>Days with <span style="background: #e57373; padding: 2px;">failure</span> hurt it.</p>
+        <p>Days where you didn't have any habits in progress have no effect on your rank.</p>
+        <p>
+          And while we're here, credit to
+          <a href="https://www.flaticon.com/authors/dimitry-miroliubov">Dimitry Miroliubov</a> for those slick badge icons.
+          👇
+        </p>
+      </div>
+      {/if}
+      <Rank {habitScore}></Rank>
     </div>
 
     <div class="section habits">
@@ -401,6 +419,11 @@
     align-items: center;
   }
 
+  .header-middle{
+    flex-grow: 1;
+    padding: 0 10px
+  }
+
   .logo {
     width: 20px;
     margin-right: 5px;
@@ -410,7 +433,7 @@
   }
 
   .hamburger {
-    margin-right: 15px;
+    margin-right: 10px;
     font-size: 15px;
     width: 35px;
     margin-bottom: 0;
@@ -430,6 +453,11 @@
     .desktop {
       display: initial;
     }
+  }
+
+  .month.mobile{
+    font-size: 12px;
+    margin: 0;
   }
 
   .body {
@@ -769,6 +797,9 @@
   .other-month.today .cell-date {
     color: #ccc;
     background: none;
+  }
+  .rank-info {
+    font-size: 13px;
   }
 
   input {
