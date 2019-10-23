@@ -97,7 +97,7 @@
     </p>
     <p>
       If you want to talk about your habit challenges, email me at
-      <a href="emailto:pjrashidi@gmail.com">pjrashidi@gmail.com</a>
+      <a href="mailto:pjrashidi@gmail.com">pjrashidi@gmail.com</a>
     </p>
   </div>
   {/if}
