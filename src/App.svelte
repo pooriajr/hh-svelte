@@ -205,7 +205,7 @@
   let editModeId = ''
   let progressBarColor = '#2196f3'
   let activeCell = ''
-  let showRankInfo = false;
+  let showRankInfo = false
 
   function toggleSidebar() {
     sidebarActive = !sidebarActive
@@ -219,10 +219,10 @@
     <img class="logo desktop" alt="logo" src="habit-helper-logo.svg" />
     <h3 class="logo-type desktop">Habit Helper</h3>
     {#if sidebarActive}
-      <img in:fly="{{ x: -30, duration:100 }}" class="logo mobile" alt="logo" src="habit-helper-logo.svg" />
-      <h3  in:fly="{{ x: -30, duration:100 }}"class="logo-type mobile">HH</h3>
+    <img in:fly="{{ x: -30, duration:100 }}" class="logo mobile" alt="logo" src="habit-helper-logo.svg" />
+    <h3 in:fly="{{ x: -30, duration:100 }}" class="logo-type mobile">HH</h3>
     {/if}
-      <Rank {habitScore} inHeader="true" hide={sidebarActive}></Rank>
+    <Rank {habitScore} inHeader="true" hide="{sidebarActive}"></Rank>
   </div>
   <div class="header-right">
     <p class="month desktop">{monthNames[displayDate.getMonth()]} {displayDate.getFullYear()}</p>
@@ -240,18 +240,21 @@
     <div class="section score">
       <div class="section-top">
         <div class="section-title">Habit Rank</div>
-        <button on:click={()=>{showRankInfo = !showRankInfo}}>{showRankInfo ? 'Hide Info' : '?'}</button>
+        <button on:click="{()=>{showRankInfo = !showRankInfo}}">{showRankInfo ? 'Hide Info' : '?'}</button>
       </div>
       {#if showRankInfo}
       <div class="rank-info">
-        <p>Your rank is determined by your performance over the last 75 days.</p>
-        <p>Days with <span style="background: #aed581; padding: 2px;">success</span> increase your rank.</p>
-        <p>Days with <span style="background: #e57373; padding: 2px;">failure</span> hurt it.</p>
+        <p>Your rank is determined by your performance over time.</p>
+        <p>
+          Marking <span style="background: #aed581; padding: 2px;">success</span> increases your rank, while marking
+          <span style="background: #e57373; padding: 2px;">failure</span> reduces it.
+        </p>
         <p>Days where you didn't have any habits in progress have no effect on your rank.</p>
+        <p>Doing more habits won't speed up rankings. Only your overall ratio of success/failure matters.</p>
         <p>
           And while we're here, credit to
-          <a href="https://www.flaticon.com/authors/dimitry-miroliubov">Dimitry Miroliubov</a> for those slick badge icons.
-          👇
+          <a href="https://www.flaticon.com/authors/dimitry-miroliubov">Dimitry Miroliubov</a> for those slick badge
+          icons. 👇
         </p>
       </div>
       {/if}
@@ -330,7 +333,7 @@
       <div class="section-top">
         <div class="section-title">Stay updated</div>
       </div>
-      <SignupForm/>
+      <SignupForm></SignupForm>
     </div>
   </div>
 
@@ -396,10 +399,10 @@
       {/each}
     </div>
     <div class="calendar-footer">
-        <a href="/contact">
-          Questions, Issues, Suggestions →
-        </a>
-      </div>
+      <a href="/contact">
+        Questions, Issues, Suggestions →
+      </a>
+    </div>
   </div>
 </div>
 
@@ -418,9 +421,9 @@
     align-items: center;
   }
 
-  .header-middle{
+  .header-middle {
     flex-grow: 1;
-    padding: 0 10px
+    padding: 0 10px;
   }
 
   .logo {
@@ -458,7 +461,7 @@
     }
   }
 
-  .month.mobile{
+  .month.mobile {
     font-size: 12px;
     margin: 0;
   }
@@ -477,8 +480,8 @@
     overflow-y: auto;
   }
 
-  .body.sidebar-active .sidebar{
-    margin-right: 8px;
+  .body.sidebar-active .sidebar {
+    padding-right: 8px;
     min-width: 100%;
     left: 0;
   }
@@ -491,13 +494,13 @@
   /* force sidebar open after 600px width */
   @media (min-width: 600px) {
     .sidebar {
-      margin-right: 8px !important;
-      min-width: 220px !important;
+      padding-right: 8px !important;
+      min-width: 240px !important;
       left: 0 !important;
     }
     .calendar {
-    width: 100% !important;
-    display: initial !important;
+      width: 100% !important;
+      display: initial !important;
     }
   }
 
@@ -626,7 +629,7 @@
   .day-grid {
     width: 100%;
     /* subtract the height of day row and calendar footer */
-    height: calc(100% - 43px); 
+    height: calc(100% - 43px);
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     grid-template-rows: repeat(6, 1fr);
@@ -635,7 +638,7 @@
     border: 1px solid #d4d4d4;
   }
 
-  .calendar-footer{
+  .calendar-footer {
     height: 30px;
     font-size: 14px;
     display: flex;
@@ -644,7 +647,7 @@
   }
 
   .calendar-footer a {
-    color: #757575
+    color: #757575;
   }
 
   .cell {
@@ -755,13 +758,13 @@
   .cell-habit.success {
     background: #aed581;
   }
-  button.cell-habit.success{
+  button.cell-habit.success {
     border: 1px solid #558b2f;
   }
   .cell-habit.failure {
     background: #e57373;
   }
-  button.cell-habit.failure{
+  button.cell-habit.failure {
     border: 1px solid #c62828;
   }
   .cell-habit:disabled {

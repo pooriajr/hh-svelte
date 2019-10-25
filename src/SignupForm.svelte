@@ -2,7 +2,7 @@
   <small>Get special perks & future updates!</small>
   <form name="sign-up" method="post">
     <input type="hidden" name="form-name" value="sign-up" />
-    <input type="email" name="email" placeholder="email@example.com" />
+    <input type="email" name="email" required placeholder="email@example.com" />
     <button type="submit">Stay updated</button>
   </form>
 </div>
