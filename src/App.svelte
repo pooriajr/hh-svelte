@@ -227,7 +227,7 @@
   <div class="header-right">
     <p class="month desktop">{monthNames[displayDate.getMonth()]} {displayDate.getFullYear()}</p>
     <p class="month mobile">
-      {monthNames[displayDate.getMonth()].substring(0,3)} '{String(displayDate.getFullYear()).substring(2)}
+      {monthNames[displayDate.getMonth()].substring(0,3)} {displayDate.getFullYear()}
     </p>
     <button class="arrow" on:click="{prevMonth}">&lsaquo</button>
     <button class="arrow" on:click="{nextMonth}">&rsaquo</button>
